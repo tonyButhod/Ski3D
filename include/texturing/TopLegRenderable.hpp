@@ -10,6 +10,7 @@
 
 #include "./../HierarchicalRenderable.hpp"
 #include "./../lighting/Material.hpp"
+#include "../../include/dynamics_rendering/ControlledSkieur.hpp"
 #include <vector>
 #include <glm/glm.hpp>
 
@@ -19,12 +20,15 @@ public :
     ~TopLegRenderable();
     TopLegRenderable(ShaderProgramPtr shaderProgram);
     void setMaterial(const MaterialPtr& material);
+    void setControlledSkieur(ControlledSkieurPtr controlledSkieur);
 
 private:
     void do_draw();
     void do_animate(float time);
     void do_keyPressedEvent(sf::Event& e);
 
+    ControlledSkieurPtr m_controlledSkieur;
+    
     std::vector< glm::vec3 > m_positions;
     std::vector< glm::vec3 > m_normals;
     std::vector< glm::vec2 > m_texCoords;

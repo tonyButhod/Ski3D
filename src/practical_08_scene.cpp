@@ -126,7 +126,7 @@ void initialize_practical_08_scene(Viewer& viewer)
     //Jambe 1
     TopLegRenderablePtr texTopLeg1 = std::make_shared<TopLegRenderable>(texShader);
     texTopLeg1->setMaterial(normalMat);
-    parentTransform = glm::translate(glm::mat4(1.0), glm::vec3(0.6,-2.0,0.0));
+    parentTransform = glm::translate(glm::mat4(1.0), glm::vec3(0.6,0.0,0.0));
     texTopLeg1->setParentTransform(parentTransform);
     HierarchicalRenderable::addChild(texBody, texTopLeg1);
     
@@ -138,7 +138,7 @@ void initialize_practical_08_scene(Viewer& viewer)
     //Jambe 2
     TopLegRenderablePtr texTopLeg2 = std::make_shared<TopLegRenderable>(texShader);
     texTopLeg2->setMaterial(normalMat);
-    parentTransform = glm::translate(glm::mat4(1.0), glm::vec3(-0.6,-2.0,0.0));
+    parentTransform = glm::translate(glm::mat4(1.0), glm::vec3(-0.6,0.0,0.0));
     texTopLeg2->setParentTransform(parentTransform);
     HierarchicalRenderable::addChild(texBody, texTopLeg2);
     
@@ -170,6 +170,14 @@ void initialize_practical_08_scene(Viewer& viewer)
     ControlledForceFieldRenderablePtr forceRenderable = std::make_shared<ControlledForceFieldRenderable>(flatShader, force);
     HierarchicalRenderable::addChild(systemRenderable, forceRenderable);
     texBody->setControlled(forceRenderable);
+    
+    ControlledSkieurPtr controlledSkieur = std::make_shared<ControlledSkieur>(flatShader);
+    HierarchicalRenderable::addChild(systemRenderable, controlledSkieur);
+    texBody->setControlledSkieur(controlledSkieur);
+    texTopLeg1->setControlledSkieur(controlledSkieur);
+    texTopLeg2->setControlledSkieur(controlledSkieur);
+    texBotLeg1->setControlledSkieur(controlledSkieur);
+    texBotLeg2->setControlledSkieur(controlledSkieur);
 
     //Add a damping force field to the mobile.
     DampingForceFieldPtr dampingForceField = std::make_shared<DampingForceField>(vParticle, 0.9);

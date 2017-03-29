@@ -12,6 +12,7 @@
 #include "./../lighting/Material.hpp"
 #include "../dynamics/Particle.hpp"
 #include "../../include/dynamics_rendering/ControlledForceFieldRenderable.hpp"
+#include "../../include/dynamics_rendering/ControlledSkieur.hpp"
 #include <vector>
 #include <glm/glm.hpp>
 
@@ -22,6 +23,7 @@ public :
     BodyRenderable(ShaderProgramPtr shaderProgram, ParticlePtr particle);
     void setMaterial(const MaterialPtr& material);
     void setControlled(ControlledForceFieldRenderablePtr controlled);
+    void setControlledSkieur(ControlledSkieurPtr controlledSkieur);
 
 private:
     void do_draw();
@@ -30,6 +32,7 @@ private:
 
     ParticlePtr m_particle;
     ControlledForceFieldRenderablePtr m_controlled;
+    ControlledSkieurPtr m_controlledSkieur;
         
     size_t m_numberOfVertices;
     std::vector< glm::vec3 > m_positions;

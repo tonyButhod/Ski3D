@@ -178,3 +178,7 @@ void BodyRenderable::setMaterial(const MaterialPtr& material)
 void BodyRenderable::setControlled(ControlledForceFieldRenderablePtr controlled) {
     m_controlled = controlled;
 }
+
+void BodyRenderable::setControlledSkieur(ControlledSkieurPtr controlledSkieur) {
+    m_controlledSkieur = controlledSkieur;
+}
