@@ -21,6 +21,7 @@ public :
     TopLegRenderable(ShaderProgramPtr shaderProgram);
     void setMaterial(const MaterialPtr& material);
     void setControlledSkieur(ControlledSkieurPtr controlledSkieur);
+    void setPosRepos(glm::mat4 pos);
 
 private:
     void do_draw();
@@ -28,6 +29,7 @@ private:
     void do_keyPressedEvent(sf::Event& e);
 
     ControlledSkieurPtr m_controlledSkieur;
+    glm::mat4 m_posRepos = glm::mat4(1.0);
     
     std::vector< glm::vec3 > m_positions;
     std::vector< glm::vec3 > m_normals;

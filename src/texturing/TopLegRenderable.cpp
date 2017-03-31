@@ -87,7 +87,7 @@ void TopLegRenderable::do_draw()
 {
     const float &angle = m_controlledSkieur->getAngle();
     glm::mat4 rotate = glm::rotate(glm::mat4(1.0), angle, glm::vec3(1.0, 0.0, 0.0));
-    setLocalTransform(rotate);
+    setParentTransform(m_posRepos*rotate);
     
     //Locations
     int modelLocation = m_shaderProgram->getUniformLocation("modelMat");
@@ -171,3 +171,6 @@ void TopLegRenderable::setControlledSkieur(ControlledSkieurPtr controlledSkieur)
     m_controlledSkieur = controlledSkieur;
 }
 
+void TopLegRenderable::setPosRepos(glm::mat4 pos) {
+    m_posRepos = pos;
+}

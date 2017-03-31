@@ -86,8 +86,8 @@ BottomLegRenderable::~BottomLegRenderable()
 void BottomLegRenderable::do_draw()
 {
     const float &angle = m_controlledSkieur->getAngle();
-    glm::mat4 translate = glm::translate(glm::mat4(1.0), glm::vec3(0.0, 2.0-2.0*std::cos(angle), -2.0*std::sin(angle)));
-    setLocalTransform(translate);
+    glm::mat4 rotate = glm::rotate(glm::mat4(1.0), -2.0f*angle, glm::vec3(1.0, 0.0, 0.0));
+    setParentTransform(m_posRepos*rotate);
     
     //Locations
     int modelLocation = m_shaderProgram->getUniformLocation("modelMat");
@@ -171,3 +171,6 @@ void BottomLegRenderable::setControlledSkieur(ControlledSkieurPtr controlledSkie
     m_controlledSkieur = controlledSkieur;
 }
 
+void BottomLegRenderable::setPosRepos(glm::mat4 pos) {
+    m_posRepos = pos;
+}

@@ -24,6 +24,7 @@
 #include "../include/texturing/BottomLegRenderable.hpp"
 #include "../include/texturing/TopLegRenderable.hpp"
 #include "../include/texturing/BodyRenderable.hpp"
+#include "../include/SkieurRenderable.hpp"
 
 
 void initialize_practical_08_scene(Viewer& viewer)
@@ -117,36 +118,38 @@ void initialize_practical_08_scene(Viewer& viewer)
     system->addParticle( mobile );
     
     //Skieur
-    BodyRenderablePtr texBody = std::make_shared<BodyRenderable>(texShader, mobile);
-    parentTransform = glm::translate(glm::mat4(1.0), glm::vec3(0.0, 4.0, 0.0));
-    texBody->setParentTransform(parentTransform);
-    texBody->setMaterial(normalMat);
-    HierarchicalRenderable::addChild(systemRenderable, texBody);
-    //viewer.addRenderable(texBody);
-    //Jambe 1
-    TopLegRenderablePtr texTopLeg1 = std::make_shared<TopLegRenderable>(texShader);
-    texTopLeg1->setMaterial(normalMat);
-    parentTransform = glm::translate(glm::mat4(1.0), glm::vec3(0.6,0.0,0.0));
-    texTopLeg1->setParentTransform(parentTransform);
-    HierarchicalRenderable::addChild(texBody, texTopLeg1);
+    SkieurRenderablePtr skieur = std::make_shared<SkieurRenderable>(texShader, mobile, systemRenderable, system);
     
-    BottomLegRenderablePtr texBotLeg1 = std::make_shared<BottomLegRenderable>(texShader);
-    texBotLeg1->setMaterial(normalMat);
-    parentTransform = glm::translate(glm::mat4(1.0), glm::vec3(0.0,-2.0,0.0));
-    texBotLeg1->setParentTransform(parentTransform);
-    HierarchicalRenderable::addChild(texTopLeg1, texBotLeg1);
-    //Jambe 2
-    TopLegRenderablePtr texTopLeg2 = std::make_shared<TopLegRenderable>(texShader);
-    texTopLeg2->setMaterial(normalMat);
-    parentTransform = glm::translate(glm::mat4(1.0), glm::vec3(-0.6,0.0,0.0));
-    texTopLeg2->setParentTransform(parentTransform);
-    HierarchicalRenderable::addChild(texBody, texTopLeg2);
-    
-    BottomLegRenderablePtr texBotLeg2 = std::make_shared<BottomLegRenderable>(texShader);
-    texBotLeg2->setMaterial(normalMat);
-    parentTransform = glm::translate(glm::mat4(1.0), glm::vec3(0.0,-2.0,0.0));
-    texBotLeg2->setParentTransform(parentTransform);
-    HierarchicalRenderable::addChild(texTopLeg2, texBotLeg2);
+//    //Body
+//    BodyRenderablePtr texBody = std::make_shared<BodyRenderable>(texShader, mobile);
+//    parentTransform = glm::translate(glm::mat4(1.0), glm::vec3(0.0, 4.0, 0.0));
+//    texBody->setParentTransform(parentTransform);
+//    texBody->setMaterial(normalMat);
+//    HierarchicalRenderable::addChild(systemRenderable, texBody);
+//    //Jambe 1
+//    TopLegRenderablePtr texTopLeg1 = std::make_shared<TopLegRenderable>(texShader);
+//    texTopLeg1->setMaterial(normalMat);
+//    parentTransform = glm::translate(glm::mat4(1.0), glm::vec3(0.6,0.0,0.0));
+//    texTopLeg1->setPosRepos(parentTransform);
+//    HierarchicalRenderable::addChild(texBody, texTopLeg1);
+//    
+//    BottomLegRenderablePtr texBotLeg1 = std::make_shared<BottomLegRenderable>(texShader);
+//    texBotLeg1->setMaterial(normalMat);
+//    parentTransform = glm::translate(glm::mat4(1.0), glm::vec3(0.0,-2.0,0.0));
+//    texBotLeg1->setPosRepos(parentTransform);
+//    HierarchicalRenderable::addChild(texTopLeg1, texBotLeg1);
+//    //Jambe 2
+//    TopLegRenderablePtr texTopLeg2 = std::make_shared<TopLegRenderable>(texShader);
+//    texTopLeg2->setMaterial(normalMat);
+//    parentTransform = glm::translate(glm::mat4(1.0), glm::vec3(-0.6,0.0,0.0));
+//    texTopLeg2->setPosRepos(parentTransform);
+//    HierarchicalRenderable::addChild(texBody, texTopLeg2);
+//    
+//    BottomLegRenderablePtr texBotLeg2 = std::make_shared<BottomLegRenderable>(texShader);
+//    texBotLeg2->setMaterial(normalMat);
+//    parentTransform = glm::translate(glm::mat4(1.0), glm::vec3(0.0,-2.0,0.0));
+//    texBotLeg2->setPosRepos(parentTransform);
+//    HierarchicalRenderable::addChild(texTopLeg2, texBotLeg2);
 
     //Lighted Cube
     LightedCubeRenderablePtr ground
@@ -157,31 +160,31 @@ void initialize_practical_08_scene(Viewer& viewer)
     ground->setMaterial(pearl);
     viewer.addRenderable(ground);
     
-    //Initialize a force field that apply only to the mobile particle
-    glm::vec3 nullForce(0.0, 0.0, 0.0);
-    std::vector<ParticlePtr> vParticle;
-    vParticle.push_back(mobile);
-    ConstantForceFieldPtr force = std::make_shared<ConstantForceField>(vParticle, nullForce);
-    system->addForceField(force);
-
-    //Initialize a renderable for the force field applied on the mobile particle.
-    //This renderable allows to modify the attribute of the force by key/mouse events
-    //Add this renderable to the systemRenderable.
-    ControlledForceFieldRenderablePtr forceRenderable = std::make_shared<ControlledForceFieldRenderable>(flatShader, force);
-    HierarchicalRenderable::addChild(systemRenderable, forceRenderable);
-    texBody->setControlled(forceRenderable);
-    
-    ControlledSkieurPtr controlledSkieur = std::make_shared<ControlledSkieur>(flatShader);
-    HierarchicalRenderable::addChild(systemRenderable, controlledSkieur);
-    texBody->setControlledSkieur(controlledSkieur);
-    texTopLeg1->setControlledSkieur(controlledSkieur);
-    texTopLeg2->setControlledSkieur(controlledSkieur);
-    texBotLeg1->setControlledSkieur(controlledSkieur);
-    texBotLeg2->setControlledSkieur(controlledSkieur);
-
-    //Add a damping force field to the mobile.
-    DampingForceFieldPtr dampingForceField = std::make_shared<DampingForceField>(vParticle, 0.9);
-    system->addForceField(dampingForceField);
+//    //Initialize a force field that apply only to the mobile particle
+//    glm::vec3 nullForce(0.0, 0.0, 0.0);
+//    std::vector<ParticlePtr> vParticle;
+//    vParticle.push_back(mobile);
+//    ConstantForceFieldPtr force = std::make_shared<ConstantForceField>(vParticle, nullForce);
+//    system->addForceField(force);
+//
+//    //Initialize a renderable for the force field applied on the mobile particle.
+//    //This renderable allows to modify the attribute of the force by key/mouse events
+//    //Add this renderable to the systemRenderable.
+//    ControlledForceFieldRenderablePtr forceRenderable = std::make_shared<ControlledForceFieldRenderable>(flatShader, force);
+//    HierarchicalRenderable::addChild(systemRenderable, forceRenderable);
+//    texBody->setControlled(forceRenderable);
+//    
+//    ControlledSkieurPtr controlledSkieur = std::make_shared<ControlledSkieur>(flatShader);
+//    HierarchicalRenderable::addChild(systemRenderable, controlledSkieur);
+//    texBody->setControlledSkieur(controlledSkieur);
+//    texTopLeg1->setControlledSkieur(controlledSkieur);
+//    texTopLeg2->setControlledSkieur(controlledSkieur);
+//    texBotLeg1->setControlledSkieur(controlledSkieur);
+//    texBotLeg2->setControlledSkieur(controlledSkieur);
+//
+//    //Add a damping force field to the mobile.
+//    DampingForceFieldPtr dampingForceField = std::make_shared<DampingForceField>(vParticle, 0.9);
+//    system->addForceField(dampingForceField);
     
     viewer.startAnimation();
 }
