@@ -1,11 +1,5 @@
 #include "./../../include/dynamics/Particle.hpp"
 
-void Particle::setRadius(const float &radius)
-{
-    m_radius = radius;
-}
-
-
 bool Particle::isFixed() const
 {
     return m_isFixed;
@@ -22,8 +16,11 @@ Particle::Particle(const glm::vec3 &position, const glm::vec3 &velocity,
     m_position(position),
     m_velocity(velocity),
     m_force(glm::vec3(0.0,0.0,0.0)),
+    m_rotation(0.0f),
     m_mass(mass),
-    m_radius(radius), m_isFixed( false )
+    m_radius(radius), 
+    m_isFixed( false ),
+    m_collision( true )
 {}
 
 Particle::~Particle()
@@ -45,6 +42,11 @@ const glm::vec3 & Particle::getForce() const
     return m_force;
 }
 
+const float& Particle::getRotation() const
+{
+    return m_rotation;
+}
+
 float Particle::getMass() const
 {
     return m_mass;
@@ -53,6 +55,9 @@ float Particle::getMass() const
 float Particle::getRadius() const
 {
     return m_radius;
+}
+bool Particle::getCollision() const {
+    return m_collision;
 }
 
 void Particle::setPosition(const glm::vec3 &pos)
@@ -68,6 +73,20 @@ void Particle::setVelocity(const glm::vec3 &vel)
 void Particle::setForce(const glm::vec3 &force)
 {
     m_force = force;
+}
+
+void Particle::setRotation(const float &rotation)
+{
+    m_rotation = rotation;
+}
+
+void Particle::setRadius(const float &radius)
+{
+    m_radius = radius;
+}
+
+void Particle::setCollision(const bool collision) {
+    m_collision = collision;
 }
 
 void Particle::incrPosition(const glm::vec3 &pos)

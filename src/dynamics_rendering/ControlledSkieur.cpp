@@ -23,11 +23,11 @@ void ControlledSkieurStatus::clear()
     angularSpeedDown = 4.0;
     angularSpeedUp = 5.5;
     
-    space = false;
+    enter = false;
 }
 
-ControlledSkieur::ControlledSkieur(ShaderProgramPtr program)
-    : HierarchicalRenderable(program)
+ControlledSkieur::ControlledSkieur(ShaderProgramPtr program, ParticlePtr particle)
+    : HierarchicalRenderable(program), m_particle(particle)
 {
     m_status = ControlledSkieurStatus();
 }
@@ -39,14 +39,14 @@ ControlledSkieur::~ControlledSkieur()
 void ControlledSkieur::do_keyPressedEvent(sf::Event& e)
 {
     if (e.key.code == sf::Keyboard::Return) {
-        m_status.space = true;
+        m_status.enter = true;
     }
 }
 
 void ControlledSkieur::do_keyReleasedEvent(sf::Event& e)
 {
     if (e.key.code == sf::Keyboard::Return) {
-        m_status.space = false;
+        m_status.enter = false;
     }
 }
 
@@ -54,7 +54,7 @@ void ControlledSkieur::do_animate(float time)
 {
     if (time > m_status.last_time) {
         float dt = time - m_status.last_time;
-        if (m_status.space) {
+        if (m_status.enter) {
             m_status.angle += dt * m_status.angularSpeedDown;
             if (m_status.angle > m_status.max_angle)
                 m_status.angle = m_status.max_angle;
@@ -63,6 +63,11 @@ void ControlledSkieur::do_animate(float time)
             m_status.angle -= dt * m_status.angularSpeedUp;
             if (m_status.angle < m_status.min_angle)
                 m_status.angle = m_status.min_angle;
+            if (m_particle->getCollision() && m_status.angle != m_status.min_angle) {
+                glm::vec3 velocity = m_particle->getVelocity();
+                velocity[2] = m_status.angle*5.0;
+                m_particle->setVelocity(velocity);
+            }
         }
     }
     m_status.last_time = time;

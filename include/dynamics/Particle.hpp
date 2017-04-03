@@ -51,6 +51,10 @@ public:
      * @return The particle's applied force.
      */
     const glm::vec3& getForce() const;
+    
+    const float& getRotation() const;
+    
+    bool getCollision() const;
 
     /**@brief Access to this particle's mass.
      *
@@ -94,6 +98,10 @@ public:
      */
     void setForce(const glm::vec3 &force);
 
+    void setRotation(const float &rotation);
+    
+    void setCollision(const bool collision);
+    
     /**@brief Set the particle's radius.
      *
      * Set the radius of this particle.
@@ -168,6 +176,8 @@ private:
      * The force applied to this particle.
      */
     glm::vec3 m_force;
+    
+    float m_rotation;
 
     /**@brief The particle's mass.
      *
@@ -187,6 +197,8 @@ private:
      * the position should be constant and the velocity null in simulation steps.
      */
     bool m_isFixed;
+    
+    bool m_collision;
 };
 
 typedef std::shared_ptr<Particle> ParticlePtr;

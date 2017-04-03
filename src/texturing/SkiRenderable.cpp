@@ -1,8 +1,7 @@
-#include "../../include/texturing/BodyRenderable.hpp"
+#include "../../include/texturing/SkiRenderable.hpp"
 #include "../../include/gl_helper.hpp"
 #include "../../include/log.hpp"
 #include "../../teachers/Geometries.hpp"
-#include "./../../include/Utils.hpp"
 
 #include <glm/gtx/quaternion.hpp>
 #include <glm/gtc/type_ptr.hpp>
@@ -13,14 +12,15 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-BodyRenderable::BodyRenderable(ShaderProgramPtr shaderProgram)
+SkiRenderable::SkiRenderable(
+        ShaderProgramPtr shaderProgram)
     : HierarchicalRenderable(shaderProgram),
       m_pBuffer(0), m_nBuffer(0), m_tBuffer(0), m_texId(0),
       m_wrapOption(0), m_filterOption(0)
 {
     glm::mat4 transformation = glm::mat4(1.0);
-    transformation = glm::scale(transformation,  glm::vec3(2.2,1.0,4.0));
-    transformation = glm::translate(transformation,  glm::vec3(0.0,0.0,0.5));
+    transformation = glm::scale(transformation, glm::vec3(0.5,10.0,0.2));
+    transformation = glm::translate(transformation, glm::vec3(0.0,0.0,-1.0));
     //Ajout d'un cylindre (à remplacer par mesh)
     std::vector<glm::vec3> tmp_x, tmp_n;
     std::vector<glm::vec2> tmp_tex;
@@ -76,7 +76,7 @@ BodyRenderable::BodyRenderable(ShaderProgramPtr shaderProgram)
     glcheck(glBindTexture(GL_TEXTURE_2D, 0));
 }
 
-BodyRenderable::~BodyRenderable()
+SkiRenderable::~SkiRenderable()
 {
     glcheck(glDeleteBuffers(1, &m_pBuffer));
     glcheck(glDeleteBuffers(1, &m_nBuffer));
@@ -85,18 +85,11 @@ BodyRenderable::~BodyRenderable()
     glcheck(glDeleteTextures(1, &m_texId));
 }
 
-void BodyRenderable::do_draw()
+void SkiRenderable::do_draw()
 {
-    //Update the parent and local transform matrix to position the geometric data according to the particle's data.
-    const float& pRadius = (m_particle)?m_particle->getRadius():1.0;
-    const glm::vec3& pPosition = (m_particle)?m_particle->getPosition():glm::vec3(0.0);
-    const float &angle = (m_particle)?m_particle->getRotation():0.0;
-    const float angleLeg = (m_controlledSkieur)?m_controlledSkieur->getAngle():0.0f;
-    glm::vec3 newPos = pPosition - glm::vec3(0.0,0.0,0.5f*pRadius*sin(angleLeg));
-    glm::mat4 scale = glm::scale(glm::mat4(1.0), glm::vec3(0.25f*pRadius));
-    glm::mat4 rotate = glm::rotate(glm::mat4(1.0), angle-1.570796f, glm::vec3(0.0, 0.0, 1.0));
-    glm::mat4 translate = glm::translate(glm::mat4(1.0), newPos);
-    setParentTransform(translate*rotate*scale);
+    const float &angle = (m_controlledSkieur)?m_controlledSkieur->getAngle():0;
+    glm::mat4 rotate = glm::rotate(glm::mat4(1.0), angle, glm::vec3(1.0, 0.0, 0.0));
+    setParentTransform(m_posRepos*rotate);
     
     //Locations
     int modelLocation = m_shaderProgram->getUniformLocation("modelMat");
@@ -163,23 +156,23 @@ void BodyRenderable::do_draw()
     }
 }
 
-void BodyRenderable::do_animate(float time)
+void SkiRenderable::do_animate(float time)
 {
 }
 
-void BodyRenderable::do_keyPressedEvent( sf::Event& e )
+void SkiRenderable::do_keyPressedEvent( sf::Event& e )
 {
 }
 
-void BodyRenderable::setMaterial(const MaterialPtr& material)
+void SkiRenderable::setMaterial(const MaterialPtr& material)
 {
     m_material = material;
 }
 
-void BodyRenderable::setControlledSkieur(ControlledSkieurPtr controlledSkieur) {
+void SkiRenderable::setControlledSkieur(ControlledSkieurPtr controlledSkieur) {
     m_controlledSkieur = controlledSkieur;
 }
 
-void BodyRenderable::setParticle(ParticlePtr particle) {
-    m_particle = particle;
+void SkiRenderable::setPosRepos(glm::mat4 pos) {
+    m_posRepos = pos;
 }

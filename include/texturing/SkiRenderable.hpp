@@ -1,39 +1,36 @@
 /* 
- * File:   BodyRenderable.hpp
+ * File:   BottomLegRenderable.hpp
  * Author: buthodgt
  *
  * Created on March 27, 2017, 11:54 AM
  */
 
-#ifndef BODYRENDERABLE_HPP
-#define	BODYRENDERABLE_HPP
+#ifndef SKIRENDERABLE_HPP
+#define	SKIRENDERABLE_HPP
 
 #include "./../HierarchicalRenderable.hpp"
 #include "./../lighting/Material.hpp"
-#include "../dynamics/Particle.hpp"
-#include "../../include/dynamics_rendering/ControlledForceFieldRenderable.hpp"
 #include "../../include/dynamics_rendering/ControlledSkieur.hpp"
 #include <vector>
 #include <glm/glm.hpp>
 
-class BodyRenderable : public HierarchicalRenderable
+class SkiRenderable : public HierarchicalRenderable
 {
 public :
-    ~BodyRenderable();
-    BodyRenderable(ShaderProgramPtr shaderProgram);
+    ~SkiRenderable();
+    SkiRenderable(ShaderProgramPtr shaderProgram);
     void setMaterial(const MaterialPtr& material);
     void setControlledSkieur(ControlledSkieurPtr controlledSkieur);
-    void setParticle(ParticlePtr particle);
+    void setPosRepos(glm::mat4 pos);
 
 private:
     void do_draw();
     void do_animate(float time);
     void do_keyPressedEvent(sf::Event& e);
 
-    ParticlePtr m_particle;
     ControlledSkieurPtr m_controlledSkieur;
-        
-    size_t m_numberOfVertices;
+    glm::mat4 m_posRepos = glm::mat4(1.0);
+    
     std::vector< glm::vec3 > m_positions;
     std::vector< glm::vec3 > m_normals;
     std::vector< glm::vec2 > m_texCoords;
@@ -50,7 +47,7 @@ private:
     MaterialPtr m_material;
 };
 
-typedef std::shared_ptr<BodyRenderable> BodyRenderablePtr;
+typedef std::shared_ptr<SkiRenderable> SkiRenderablePtr;
 
-#endif	/* BODYRENDERABLE_HPP */
+#endif	/* SKIRENDERABLE_HPP */
 

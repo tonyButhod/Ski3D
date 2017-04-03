@@ -15,7 +15,7 @@ void ParticlePlaneCollision::do_solveCollision()
     //Don't process fixed particles (ground plane is assumed fixed)
     if (m_particle->isFixed())
         return;
-
+    
     //TODO: Solve ParticlePlane collisions,
     // update particle position and velocity after collision
     //
@@ -56,8 +56,10 @@ bool testParticlePlane(const ParticlePtr &particle, const PlanePtr &plane)
     //Plane::normal(): Return the normal of the plane
     //Particle::getRadius(), Particle::getPosition()
     if (std::abs(glm::dot(particle->getPosition(), plane->normal())-plane->distanceToOrigin()) <= particle->getRadius()) {
+        particle->setCollision(true);
         return true;
     }
+    particle->setCollision(false);
 
     return false;
 }

@@ -3,6 +3,7 @@
 
 #include "../HierarchicalRenderable.hpp"
 #include "../dynamics/ConstantForceField.hpp"
+#include "../dynamics/Particle.hpp"
 
 /**@brief Status of a ControlledSkieurStatus.
  *
@@ -26,7 +27,7 @@ public:
     float angularSpeedDown;
     float angularSpeedUp;
 
-    bool space;
+    bool enter;
 };
 
 
@@ -44,7 +45,7 @@ public:
 class ControlledSkieur : public HierarchicalRenderable
 {
 public:
-  ControlledSkieur(ShaderProgramPtr program);
+  ControlledSkieur(ShaderProgramPtr program, ParticlePtr particle);
   ~ControlledSkieur();
   const float &getAngle();
 
@@ -56,6 +57,7 @@ private:
   virtual void do_draw();
 
   ControlledSkieurStatus m_status;
+  ParticlePtr m_particle;
 };
 
 typedef std::shared_ptr<ControlledSkieur> ControlledSkieurPtr;

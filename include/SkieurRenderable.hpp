@@ -18,6 +18,7 @@
 #include "../include/texturing/BodyRenderable.hpp"
 #include "../include/texturing/BottomLegRenderable.hpp"
 #include "../include/texturing/TopLegRenderable.hpp"
+#include "../include/texturing/SkiRenderable.hpp"
 #include <vector>
 #include <glm/glm.hpp>
 
@@ -25,8 +26,10 @@ class SkieurRenderable : public HierarchicalRenderable
 {
 public :
     ~SkieurRenderable();
-    SkieurRenderable(ShaderProgramPtr shaderProgram, ParticlePtr particle,
-            HierarchicalRenderablePtr parentRenderable, DynamicSystemPtr system);
+    SkieurRenderable(ShaderProgramPtr shaderProgram,
+            HierarchicalRenderablePtr parentRenderable, ParticlePtr particle);
+    void initControlledSkieur(ShaderProgramPtr shaderProgram, 
+        HierarchicalRenderablePtr parentRenderable);
 
 private:
     void do_draw();
@@ -34,8 +37,12 @@ private:
     void do_keyPressedEvent(sf::Event& e);
 
     ParticlePtr m_particle;
-    ControlledForceFieldRenderablePtr m_controlled;
     ControlledSkieurPtr m_controlledSkieur;
+    
+    BodyRenderablePtr m_body;
+    TopLegRenderablePtr m_topLeg1, m_topLeg2;
+    BottomLegRenderablePtr m_botLeg1, m_botLeg2;
+    SkiRenderablePtr m_ski1, m_ski2;
     
 };
 

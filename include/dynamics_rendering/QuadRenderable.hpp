@@ -27,7 +27,7 @@ public:
     QuadRenderable(ShaderProgramPtr program,
                    const glm::vec3& p1, const glm::vec3& p2,
                    const glm::vec3& p3, const glm::vec3& p4,
-                   const glm::vec4& color = glm::vec4{1.0, 0, 0, 1.0}
+                   const glm::vec4& color = glm::vec4{1.0, 1.0, 1.0, 1.0}
                    );
 
 private:

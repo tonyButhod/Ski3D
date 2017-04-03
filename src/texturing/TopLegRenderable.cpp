@@ -18,8 +18,9 @@ TopLegRenderable::TopLegRenderable(
       m_pBuffer(0), m_nBuffer(0), m_tBuffer(0), m_texId(0),
       m_wrapOption(0), m_filterOption(0)
 {
-    glm::mat4 transformation = glm::rotate(glm::mat4(1.0), 1.57079f, glm::vec3(1.0,0.0,0.0));
+    glm::mat4 transformation = glm::mat4(1.0);
     transformation = glm::scale(transformation, glm::vec3(0.5,0.5,2.0));
+    transformation = glm::translate(transformation, glm::vec3(0.0,0.0,-1.0));
     //Ajout d'un cylindre (à remplacer par mesh)
     std::vector<glm::vec3> tmp_x, tmp_n;
     teachers::getUnitCylinder(tmp_x, tmp_n, 20);
@@ -85,7 +86,7 @@ TopLegRenderable::~TopLegRenderable()
 
 void TopLegRenderable::do_draw()
 {
-    const float &angle = m_controlledSkieur->getAngle();
+    const float &angle = (m_controlledSkieur)?m_controlledSkieur->getAngle():0;
     glm::mat4 rotate = glm::rotate(glm::mat4(1.0), angle, glm::vec3(1.0, 0.0, 0.0));
     setParentTransform(m_posRepos*rotate);
     

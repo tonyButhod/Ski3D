@@ -162,6 +162,8 @@ void ControlledForceFieldRenderable::do_draw()
         m_colors.push_back(glm::vec4(1.0,0.0,0.0,1.0));
         m_normals.push_back(glm::vec3(1.0,0.0,0.0));
         m_normals.push_back(glm::vec3(1.0,0.0,0.0));
+        //On met à jour la rotation de la particule
+        p->setRotation(m_status.angle);
     }
 
     //Update data on the GPU

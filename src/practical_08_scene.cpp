@@ -1,6 +1,8 @@
 #include "../include/ShaderProgram.hpp"
 #include "../include/Viewer.hpp"
 #include "../include/FrameRenderable.hpp"
+#include "../include/SkieurRenderable.hpp"
+
 #include "../include/lighting/DirectionalLightRenderable.hpp"
 #include "../include/lighting/PointLightRenderable.hpp"
 #include "../include/lighting/SpotLightRenderable.hpp"
@@ -13,9 +15,11 @@
 #include "../include/dynamics/ConstantForceField.hpp"
 #include "../include/dynamics/SpringForceField.hpp"
 #include "../include/dynamics/EulerExplicitSolver.hpp"
-#include "../include/dynamics_rendering/ControlledForceFieldRenderable.hpp"
 
+#include "../include/dynamics_rendering/ControlledForceFieldRenderable.hpp"
+#include "../include/dynamics_rendering/QuadRenderable.hpp"
 #include "../include/dynamics_rendering/DynamicSystemRenderable.hpp"
+
 #include "../include/texturing/TexturedPlaneRenderable.hpp"
 #include "../include/texturing/TexturedCubeRenderable.hpp"
 #include "../include/texturing/MultiTexturedCubeRenderable.hpp"
@@ -24,11 +28,14 @@
 #include "../include/texturing/BottomLegRenderable.hpp"
 #include "../include/texturing/TopLegRenderable.hpp"
 #include "../include/texturing/BodyRenderable.hpp"
-#include "../include/SkieurRenderable.hpp"
 
 
 void initialize_practical_08_scene(Viewer& viewer)
 {
+    //Position the camera
+    viewer.getCamera().setViewMatrix(
+        glm::lookAt(glm::vec3(0, -4, 0), glm::vec3(0,0,0), glm::vec3(0,0,4)) );
+    
     // create all shaders of this scene, then add them to the viewer
     ShaderProgramPtr flatShader
         = std::make_shared<ShaderProgram>("../shaders/flatVertex.glsl",
@@ -60,6 +67,10 @@ void initialize_practical_08_scene(Viewer& viewer)
     EulerExplicitSolverPtr solver = std::make_shared<EulerExplicitSolver>();
     system->setSolver(solver);
     system->setDt(0.01);
+    
+    //Activate collision detection
+    system->setCollisionsDetection(true);
+    system->setRestitution(0.0f);
 
     //Create a renderable associated to the dynamic system
     //This renderable is responsible for calling DynamicSystem::computeSimulationStep()in the animate() function
@@ -109,82 +120,53 @@ void initialize_practical_08_scene(Viewer& viewer)
     MaterialPtr emerald = Material::Emerald();
     MaterialPtr normalMat = Material::Normal();
 
-    //Initialize object with position, velocity, mass and radius and add it to the system
+    //Initialize a plane from 3 points and add it to the system as an obstacle
+    glm::vec3 p1(-20.0, -20.0, -0.0);
+    glm::vec3 p2(20.0, -20.0, -20.0);
+    glm::vec3 p3(20.0, 20.0, -20.0);
+    glm::vec3 p4(-20.0, 20.0, -0.0);
+    PlanePtr plane = std::make_shared<Plane>(p1, p2, p3);
+    system->addPlaneObstacle(plane);
+    //Create a plane renderable to display the obstacle
+    PlaneRenderablePtr planeRenderable = std::make_shared<QuadRenderable>(flatShader, p1,p2,p3,p4);
+    HierarchicalRenderable::addChild( systemRenderable, planeRenderable );
+
+    /********** Initialisation du skieur ************/
+    
+    //Création de la particule associée au skieur
     glm::vec3 px(0.0, 0.0, 0.0);
     glm::vec3 pv(0.0, 0.0, 0.0);
-    float pm = 1.0, pr = 1.0;
+    float pm = 85.0, pr = 4.0;
     px = glm::vec3(0.0,4.0,0.0);
     ParticlePtr mobile = std::make_shared<Particle>( px, pv, pm, pr);
     system->addParticle( mobile );
     
     //Skieur
-    SkieurRenderablePtr skieur = std::make_shared<SkieurRenderable>(texShader, mobile, systemRenderable, system);
+    SkieurRenderablePtr skieur = std::make_shared<SkieurRenderable>(texShader, systemRenderable, mobile);
+    skieur->initControlledSkieur(flatShader, systemRenderable);
     
-//    //Body
-//    BodyRenderablePtr texBody = std::make_shared<BodyRenderable>(texShader, mobile);
-//    parentTransform = glm::translate(glm::mat4(1.0), glm::vec3(0.0, 4.0, 0.0));
-//    texBody->setParentTransform(parentTransform);
-//    texBody->setMaterial(normalMat);
-//    HierarchicalRenderable::addChild(systemRenderable, texBody);
-//    //Jambe 1
-//    TopLegRenderablePtr texTopLeg1 = std::make_shared<TopLegRenderable>(texShader);
-//    texTopLeg1->setMaterial(normalMat);
-//    parentTransform = glm::translate(glm::mat4(1.0), glm::vec3(0.6,0.0,0.0));
-//    texTopLeg1->setPosRepos(parentTransform);
-//    HierarchicalRenderable::addChild(texBody, texTopLeg1);
-//    
-//    BottomLegRenderablePtr texBotLeg1 = std::make_shared<BottomLegRenderable>(texShader);
-//    texBotLeg1->setMaterial(normalMat);
-//    parentTransform = glm::translate(glm::mat4(1.0), glm::vec3(0.0,-2.0,0.0));
-//    texBotLeg1->setPosRepos(parentTransform);
-//    HierarchicalRenderable::addChild(texTopLeg1, texBotLeg1);
-//    //Jambe 2
-//    TopLegRenderablePtr texTopLeg2 = std::make_shared<TopLegRenderable>(texShader);
-//    texTopLeg2->setMaterial(normalMat);
-//    parentTransform = glm::translate(glm::mat4(1.0), glm::vec3(-0.6,0.0,0.0));
-//    texTopLeg2->setPosRepos(parentTransform);
-//    HierarchicalRenderable::addChild(texBody, texTopLeg2);
-//    
-//    BottomLegRenderablePtr texBotLeg2 = std::make_shared<BottomLegRenderable>(texShader);
-//    texBotLeg2->setMaterial(normalMat);
-//    parentTransform = glm::translate(glm::mat4(1.0), glm::vec3(0.0,-2.0,0.0));
-//    texBotLeg2->setPosRepos(parentTransform);
-//    HierarchicalRenderable::addChild(texTopLeg2, texBotLeg2);
+    //Initialize a force field that apply only to the mobile particle
+    glm::vec3 nullForce(0.0, 0.0, 0.0);
+    std::vector<ParticlePtr> vParticle;
+    vParticle.push_back(mobile);
+    ConstantForceFieldPtr force = std::make_shared<ConstantForceField>(vParticle, nullForce);
+    system->addForceField(force);
 
-    //Lighted Cube
-    LightedCubeRenderablePtr ground
-        = std::make_shared<LightedCubeRenderable>(phongShader, pearl);
-    localTransform = glm::scale(glm::mat4(1.0), glm::vec3(20.0,0.2,20.0));
-    localTransform *= glm::translate(glm::mat4(1.0), glm::vec3(0.0,-0.5,0.0));
-    ground->setLocalTransform(localTransform);
-    ground->setMaterial(pearl);
-    viewer.addRenderable(ground);
+    //Initialize a renderable for the force field applied on the mobile particle.
+    //This renderable allows to modify the attribute of the force by key/mouse events
+    //Add this renderable to the systemRenderable.
+    ControlledForceFieldRenderablePtr forceRenderable = std::make_shared<ControlledForceFieldRenderable>(flatShader, force);
+    HierarchicalRenderable::addChild(systemRenderable, forceRenderable);
+
+    //Add a damping force field to the mobile.
+    DampingForceFieldPtr dampingForceField = std::make_shared<DampingForceField>(vParticle, 2.0);
+    system->addForceField(dampingForceField);
     
-//    //Initialize a force field that apply only to the mobile particle
-//    glm::vec3 nullForce(0.0, 0.0, 0.0);
-//    std::vector<ParticlePtr> vParticle;
-//    vParticle.push_back(mobile);
-//    ConstantForceFieldPtr force = std::make_shared<ConstantForceField>(vParticle, nullForce);
-//    system->addForceField(force);
-//
-//    //Initialize a renderable for the force field applied on the mobile particle.
-//    //This renderable allows to modify the attribute of the force by key/mouse events
-//    //Add this renderable to the systemRenderable.
-//    ControlledForceFieldRenderablePtr forceRenderable = std::make_shared<ControlledForceFieldRenderable>(flatShader, force);
-//    HierarchicalRenderable::addChild(systemRenderable, forceRenderable);
-//    texBody->setControlled(forceRenderable);
-//    
-//    ControlledSkieurPtr controlledSkieur = std::make_shared<ControlledSkieur>(flatShader);
-//    HierarchicalRenderable::addChild(systemRenderable, controlledSkieur);
-//    texBody->setControlledSkieur(controlledSkieur);
-//    texTopLeg1->setControlledSkieur(controlledSkieur);
-//    texTopLeg2->setControlledSkieur(controlledSkieur);
-//    texBotLeg1->setControlledSkieur(controlledSkieur);
-//    texBotLeg2->setControlledSkieur(controlledSkieur);
-//
-//    //Add a damping force field to the mobile.
-//    DampingForceFieldPtr dampingForceField = std::make_shared<DampingForceField>(vParticle, 0.9);
-//    system->addForceField(dampingForceField);
+    //Initialize a force field that apply to all the particles of the system to simulate gravity
+    //Add it to the system as a force field
+    ConstantForceFieldPtr gravityForceField
+        = std::make_shared<ConstantForceField>(vParticle, glm::vec3{0, 0, -9.81} );
+    system->addForceField(gravityForceField);
     
     viewer.startAnimation();
 }
