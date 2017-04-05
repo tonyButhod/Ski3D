@@ -10,7 +10,7 @@
 #include <stdlib.h>
 
 SkieurRenderable::SkieurRenderable(ShaderProgramPtr shaderProgram,
-            HierarchicalRenderablePtr parentRenderable, ParticlePtr particle)
+            HierarchicalRenderablePtr parentRenderable, ParticleSkieurPtr particle)
     : HierarchicalRenderable(shaderProgram), m_particle(particle)
 {
     glm::mat4 parentTransform(1.0);

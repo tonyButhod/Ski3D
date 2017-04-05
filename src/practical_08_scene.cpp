@@ -15,6 +15,7 @@
 #include "../include/dynamics/ConstantForceField.hpp"
 #include "../include/dynamics/SpringForceField.hpp"
 #include "../include/dynamics/EulerExplicitSolver.hpp"
+#include "../include/dynamics/ParticleSkieur.hpp"
 
 #include "../include/dynamics_rendering/ControlledForceFieldRenderable.hpp"
 #include "../include/dynamics_rendering/QuadRenderable.hpp"
@@ -138,7 +139,7 @@ void initialize_practical_08_scene(Viewer& viewer)
     glm::vec3 pv(0.0, 0.0, 0.0);
     float pm = 85.0, pr = 4.0;
     px = glm::vec3(0.0,4.0,0.0);
-    ParticlePtr mobile = std::make_shared<Particle>( px, pv, pm, pr);
+    ParticleSkieurPtr mobile = std::make_shared<ParticleSkieur>( px, pv, pm, pr);
     system->addParticle( mobile );
     
     //Skieur
