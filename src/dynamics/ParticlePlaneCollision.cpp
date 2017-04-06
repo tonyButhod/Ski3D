@@ -29,14 +29,6 @@ void ParticlePlaneCollision::do_solveCollision()
     m_particle->setPosition(m_particle->getPosition() + (m_particle->getRadius() - dist)*m_plane->normal());
     float proj_v = (1.0f + m_restitution) * glm::dot(m_plane->normal(), m_particle->getVelocity());
     m_particle->setVelocity(m_particle->getVelocity() - proj_v*m_plane->normal());
-    //Pour que le skieur glisse dans la bonne direction
-    float angle = m_particle->getRotation();
-    glm::vec3 ortho_ski = glm::normalize(glm::vec3(-sin(angle), cos(angle), 0.0));
-    float proj_ski = glm::dot(m_particle->getVelocity(), ortho_ski);
-    m_particle->setVelocity(m_particle->getVelocity() - proj_ski*ortho_ski);
-    //Réaction tangetielle du suppport.
-    float frottement = 0.001f;
-    m_particle->setVelocity((1.0f - frottement) * m_particle->getVelocity());
 }
 
 

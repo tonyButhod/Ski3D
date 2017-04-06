@@ -30,6 +30,8 @@ public :
             HierarchicalRenderablePtr parentRenderable, ParticleSkieurPtr particle);
     void initControlledSkieur(ShaderProgramPtr shaderProgram, 
         HierarchicalRenderablePtr parentRenderable);
+    void initForcesSkieur(DynamicSystemPtr system, HierarchicalRenderablePtr systemRenderable,
+            ShaderProgramPtr shader, ParticleSkieurPtr particle);
 
 private:
     void do_draw();

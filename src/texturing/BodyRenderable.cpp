@@ -90,11 +90,15 @@ void BodyRenderable::do_draw()
     //Update the parent and local transform matrix to position the geometric data according to the particle's data.
     const float& pRadius = (m_particle)?m_particle->getRadius():1.0;
     const glm::vec3& pPosition = (m_particle)?m_particle->getPosition():glm::vec3(0.0);
-    const float &angle = (m_particle)?m_particle->getRotation():0.0;
+    glm::vec3 rotation = (m_particle)?m_particle->getRotation():glm::vec3(0,0,0);
+    rotation[2] -= 1.570796f;
     const float angleLeg = (m_controlledSkieur)?m_controlledSkieur->getAngle():0.0f;
     glm::vec3 newPos = pPosition - glm::vec3(0.0,0.0,0.5f*pRadius*sin(angleLeg));
     glm::mat4 scale = glm::scale(glm::mat4(1.0), glm::vec3(0.25f*pRadius));
-    glm::mat4 rotate = glm::rotate(glm::mat4(1.0), angle-1.570796f, glm::vec3(0.0, 0.0, 1.0));
+    glm::mat4 rotate = glm::mat4(1.0);
+    rotate = glm::rotate(rotate, rotation[0], glm::vec3(1,0,0));
+    rotate = glm::rotate(rotate, rotation[1], glm::vec3(0,1,0));
+    rotate = glm::rotate(rotate, rotation[2], glm::vec3(0,0,1));
     glm::mat4 translate = glm::translate(glm::mat4(1.0), newPos);
     setParentTransform(translate*rotate*scale);
     
@@ -180,6 +184,6 @@ void BodyRenderable::setControlledSkieur(ControlledSkieurPtr controlledSkieur) {
     m_controlledSkieur = controlledSkieur;
 }
 
-void BodyRenderable::setParticle(ParticlePtr particle) {
+void BodyRenderable::setParticle(ParticleSkieurPtr particle) {
     m_particle = particle;
 }

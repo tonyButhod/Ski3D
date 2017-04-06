@@ -140,34 +140,15 @@ void initialize_practical_08_scene(Viewer& viewer)
     float pm = 85.0, pr = 4.0;
     px = glm::vec3(0.0,4.0,0.0);
     ParticleSkieurPtr mobile = std::make_shared<ParticleSkieur>( px, pv, pm, pr);
-    system->addParticle( mobile );
+    system->addSkieur( mobile );
     
     //Skieur
     SkieurRenderablePtr skieur = std::make_shared<SkieurRenderable>(texShader, systemRenderable, mobile);
+    HierarchicalRenderable::addChild(systemRenderable, skieur);
     skieur->initControlledSkieur(flatShader, systemRenderable);
+    skieur->initForcesSkieur(system, systemRenderable, flatShader, mobile);
     
-    //Initialize a force field that apply only to the mobile particle
-    glm::vec3 nullForce(0.0, 0.0, 0.0);
-    std::vector<ParticlePtr> vParticle;
-    vParticle.push_back(mobile);
-    ConstantForceFieldPtr force = std::make_shared<ConstantForceField>(vParticle, nullForce);
-    system->addForceField(force);
-
-    //Initialize a renderable for the force field applied on the mobile particle.
-    //This renderable allows to modify the attribute of the force by key/mouse events
-    //Add this renderable to the systemRenderable.
-    ControlledForceFieldRenderablePtr forceRenderable = std::make_shared<ControlledForceFieldRenderable>(flatShader, force);
-    HierarchicalRenderable::addChild(systemRenderable, forceRenderable);
-
-    //Add a damping force field to the mobile.
-    DampingForceFieldPtr dampingForceField = std::make_shared<DampingForceField>(vParticle, 2.0);
-    system->addForceField(dampingForceField);
-    
-    //Initialize a force field that apply to all the particles of the system to simulate gravity
-    //Add it to the system as a force field
-    ConstantForceFieldPtr gravityForceField
-        = std::make_shared<ConstantForceField>(vParticle, glm::vec3{0, 0, -9.81} );
-    system->addForceField(gravityForceField);
+    /*********** End Skieur ***************/
     
     viewer.startAnimation();
 }

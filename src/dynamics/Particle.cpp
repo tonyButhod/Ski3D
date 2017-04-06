@@ -16,7 +16,6 @@ Particle::Particle(const glm::vec3 &position, const glm::vec3 &velocity,
     m_position(position),
     m_velocity(velocity),
     m_force(glm::vec3(0.0,0.0,0.0)),
-    m_rotation(0.0f),
     m_mass(mass),
     m_radius(radius), 
     m_isFixed( false ),
@@ -42,11 +41,6 @@ const glm::vec3 & Particle::getForce() const
     return m_force;
 }
 
-const float& Particle::getRotation() const
-{
-    return m_rotation;
-}
-
 float Particle::getMass() const
 {
     return m_mass;
@@ -58,6 +52,10 @@ float Particle::getRadius() const
 }
 bool Particle::getCollision() const {
     return m_collision;
+}
+
+const glm::vec3 & Particle::getRotation() const {
+    return m_rotation;
 }
 
 void Particle::setPosition(const glm::vec3 &pos)
@@ -75,11 +73,6 @@ void Particle::setForce(const glm::vec3 &force)
     m_force = force;
 }
 
-void Particle::setRotation(const float &rotation)
-{
-    m_rotation = rotation;
-}
-
 void Particle::setRadius(const float &radius)
 {
     m_radius = radius;
@@ -87,6 +80,10 @@ void Particle::setRadius(const float &radius)
 
 void Particle::setCollision(const bool collision) {
     m_collision = collision;
+}
+
+void Particle::setRotation(const glm::vec3 &rotation) {
+    m_rotation = rotation;
 }
 
 void Particle::incrPosition(const glm::vec3 &pos)

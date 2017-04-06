@@ -18,7 +18,6 @@ public:
     virtual ~ParticleSkieur();
     
 private:
-    
 };
 
 typedef std::shared_ptr<ParticleSkieur> ParticleSkieurPtr;

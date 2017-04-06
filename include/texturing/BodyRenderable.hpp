@@ -11,6 +11,7 @@
 #include "./../HierarchicalRenderable.hpp"
 #include "./../lighting/Material.hpp"
 #include "../dynamics/Particle.hpp"
+#include "../dynamics/ParticleSkieur.hpp"
 #include "../../include/dynamics_rendering/ControlledForceFieldRenderable.hpp"
 #include "../../include/dynamics_rendering/ControlledSkieur.hpp"
 #include <vector>
@@ -23,14 +24,14 @@ public :
     BodyRenderable(ShaderProgramPtr shaderProgram);
     void setMaterial(const MaterialPtr& material);
     void setControlledSkieur(ControlledSkieurPtr controlledSkieur);
-    void setParticle(ParticlePtr particle);
+    void setParticle(ParticleSkieurPtr particle);
 
 private:
     void do_draw();
     void do_animate(float time);
     void do_keyPressedEvent(sf::Event& e);
 
-    ParticlePtr m_particle;
+    ParticleSkieurPtr m_particle;
     ControlledSkieurPtr m_controlledSkieur;
         
     size_t m_numberOfVertices;

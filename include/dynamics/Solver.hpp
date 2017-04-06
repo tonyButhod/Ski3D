@@ -4,6 +4,7 @@
 #include <memory>
 #include <vector>
 #include "Particle.hpp"
+#include "ParticleSkieur.hpp"
 
 /**@brief Dynamic system solver interface.
  *
@@ -22,6 +23,7 @@ public:
      * @param particles The collection of particles.
      */
     void solve(const float& dt, std::vector<ParticlePtr>& particles);
+    void solve(const float& dt, std::vector<ParticleSkieurPtr>& particles);
 
 private:
     /**@brief Solve implementation.
@@ -32,6 +34,7 @@ private:
      * @param particles The collection of particles.
      */
     virtual void do_solve(const float& dt, std::vector<ParticlePtr>& particles) = 0;
+    virtual void do_solve(const float& dt, std::vector<ParticleSkieurPtr>& particles) = 0;
 };
 
 typedef std::shared_ptr<Solver> SolverPtr;

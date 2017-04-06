@@ -6,6 +6,7 @@
 #include "Collision.hpp"
 #include "ForceField.hpp"
 #include "Particle.hpp"
+#include "ParticleSkieur.hpp"
 #include "Plane.hpp"
 #include "Solver.hpp"
 
@@ -27,6 +28,8 @@ private:
      * account the force field applied to them.
      */
     std::vector<ParticlePtr> m_particles;
+    
+    std::vector<ParticleSkieurPtr> m_skieurs;
 
     /**@brief The set of force fields influencing particles of this system.
      *
@@ -88,6 +91,9 @@ public:
      * @param p The particle to add to this system.
      */
     void addParticle(ParticlePtr p);
+    
+    void addSkieur(ParticleSkieurPtr p);
+    
     /**@brief Add a force field to the system.
      *
      * Add a force field to this dynamic system to influence particles.
@@ -134,6 +140,8 @@ public:
      * @return The set of particles of this system.
      */
     const std::vector<ParticlePtr>& getParticles() const;
+    
+    const std::vector<ParticleSkieurPtr>& getSkieurs() const;
 
     /**@brief Set the particles of this system.
      *
