@@ -8,6 +8,7 @@
 #include "./../../include/dynamics/DynamicSystem.hpp"
 #include "./../../include/dynamics/ParticlePlaneCollision.hpp"
 #include "./../../include/dynamics/ParticleParticleCollision.hpp"
+#include "./../../include/dynamics/SkieurCollision.hpp"
 
 
 DynamicSystem::DynamicSystem() :
@@ -22,6 +23,11 @@ DynamicSystem::~DynamicSystem()
 const std::vector<ParticlePtr>& DynamicSystem::getParticles() const
 {
     return m_particles;
+}
+
+const std::vector<ParticleSkieurPtr>& DynamicSystem::getSkieurs() const
+{
+    return m_skieurs;
 }
 
 void DynamicSystem::setParticles(const std::vector<ParticlePtr> &particles)
@@ -53,6 +59,7 @@ void DynamicSystem::setDt(float dt)
 void DynamicSystem::clear()
 {
     m_particles.clear();
+    m_skieurs.clear();
     m_forceFields.clear();
     m_planeObstacles.clear();
 }
@@ -70,6 +77,11 @@ void DynamicSystem::setCollisionsDetection(bool onOff)
 void DynamicSystem::addParticle(ParticlePtr p)
 {
     m_particles.push_back(p);
+}
+
+void DynamicSystem::addSkieur(ParticleSkieurPtr p)
+{
+    m_skieurs.push_back(p);
 }
 
 void DynamicSystem::addForceField(ForceFieldPtr forceField)
@@ -104,6 +116,17 @@ void DynamicSystem::detectCollisions()
             }
         }
     }
+    
+    //Detect skieur plane collisions
+    for (ParticleSkieurPtr p : m_skieurs) {
+        for (PlanePtr o : m_planeObstacles) {
+            if (testParticlePlane(p, o)) {
+                SkieurCollisionPtr c =
+                    std::make_shared<SkieurCollision>(p,o,m_restitution);
+                m_collisions.push_back(c);
+            }
+        }
+    }
 
     //Detect particle particle collisions
     for (size_t i = 0; i < m_particles.size(); ++i) {
@@ -134,6 +157,10 @@ void DynamicSystem::computeSimulationStep()
     for (ParticlePtr p : m_particles) {
         p->setForce(glm::vec3(0.0, 0.0, 0.0));
     }
+    //Reset the force for each particle
+    for (ParticleSkieurPtr p : m_skieurs) {
+        p->setForce(glm::vec3(0.0, 0.0, 0.0));
+    }
     //Compute forces
     for (ForceFieldPtr f : m_forceFields) {
         f->addForce();
@@ -141,6 +168,7 @@ void DynamicSystem::computeSimulationStep()
 
     //Integrate position and velocity of particles
     m_solver->solve(m_dt, m_particles);
+    m_solver->solve(m_dt, m_skieurs);
 
     //Detect and resolve collisions
     if (m_handleCollisions) {

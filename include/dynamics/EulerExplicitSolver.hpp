@@ -15,6 +15,7 @@ public:
 
 private:
     void do_solve(const float& dt, std::vector<ParticlePtr>& particles);
+    void do_solve(const float& dt, std::vector<ParticleSkieurPtr>& particles);
 };
 
 typedef std::shared_ptr<EulerExplicitSolver> EulerExplicitSolverPtr;

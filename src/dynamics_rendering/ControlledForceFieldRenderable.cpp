@@ -171,6 +171,9 @@ void ControlledForceFieldRenderable::do_draw()
 			m_camera->setCharPos(p->getPosition());
 			m_camera->setEyePos(p->getPosition());
 		}
+        glm::vec3 curr_rot = p->getRotation();
+        glm::vec3 new_rot = glm::vec3(curr_rot[0], curr_rot[1], m_status.angle);
+        p->setRotation(new_rot);
     }
 
 

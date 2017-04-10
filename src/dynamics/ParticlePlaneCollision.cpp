@@ -24,6 +24,7 @@ void ParticlePlaneCollision::do_solveCollision()
     //Plane::distanceToOrigin(): Return the distance to origin from the plane
     //Plane::normal(): Return the normal of the plane
     //Particle::getRadius(), Particle::getPosition(), Particle::getVelocity(), Particle::setPosition(), Particle::setVelocity()
+    //Réaction normale du support.
     float dist = std::abs(glm::dot(m_particle->getPosition(), m_plane->normal())-m_plane->distanceToOrigin());
     m_particle->setPosition(m_particle->getPosition() + (m_particle->getRadius() - dist)*m_plane->normal());
     float proj_v = (1.0f + m_restitution) * glm::dot(m_plane->normal(), m_particle->getVelocity());

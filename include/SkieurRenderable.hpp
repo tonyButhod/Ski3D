@@ -10,7 +10,7 @@
 
 #include "../include/HierarchicalRenderable.hpp"
 #include "../include/lighting/Material.hpp"
-#include "../include/dynamics/Particle.hpp"
+#include "../include/dynamics/ParticleSkieur.hpp"
 #include "../include/dynamics_rendering/ControlledForceFieldRenderable.hpp"
 #include "../include/dynamics_rendering/ControlledSkieur.hpp"
 #include "../include/dynamics_rendering/DynamicSystemRenderable.hpp"
@@ -27,16 +27,18 @@ class SkieurRenderable : public HierarchicalRenderable
 public :
     ~SkieurRenderable();
     SkieurRenderable(ShaderProgramPtr shaderProgram,
-            HierarchicalRenderablePtr parentRenderable, ParticlePtr particle);
+            HierarchicalRenderablePtr parentRenderable, ParticleSkieurPtr particle);
     void initControlledSkieur(ShaderProgramPtr shaderProgram, 
         HierarchicalRenderablePtr parentRenderable);
+    void initForcesSkieur(DynamicSystemPtr system, HierarchicalRenderablePtr systemRenderable,
+            ShaderProgramPtr shader, ParticleSkieurPtr particle);
 
 private:
     void do_draw();
     void do_animate(float time);
     void do_keyPressedEvent(sf::Event& e);
 
-    ParticlePtr m_particle;
+    ParticleSkieurPtr m_particle;
     ControlledSkieurPtr m_controlledSkieur;
     
     BodyRenderablePtr m_body;

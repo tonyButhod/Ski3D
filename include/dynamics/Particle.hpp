@@ -52,9 +52,9 @@ public:
      */
     const glm::vec3& getForce() const;
     
-    const float& getRotation() const;
-    
     bool getCollision() const;
+    
+    const glm::vec3 & getRotation() const;
 
     /**@brief Access to this particle's mass.
      *
@@ -97,10 +97,10 @@ public:
      * @param force The new force applied to this particle.
      */
     void setForce(const glm::vec3 &force);
-
-    void setRotation(const float &rotation);
     
     void setCollision(const bool collision);
+    
+    void setRotation(const glm::vec3 &rotation);
     
     /**@brief Set the particle's radius.
      *
@@ -177,7 +177,7 @@ private:
      */
     glm::vec3 m_force;
     
-    float m_rotation;
+    glm::vec3 m_rotation;
 
     /**@brief The particle's mass.
      *

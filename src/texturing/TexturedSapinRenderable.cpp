@@ -22,11 +22,11 @@ TexturedSapinRenderable::TexturedSapinRenderable(
     //Ajout du tronc du sapin
     std::vector<glm::vec3> tmp_x, tmp_n;
     std::vector<glm::vec2> tmp_tex;
-    unsigned int strips=20, slices=20;
+    unsigned int strips=10, slices=10;
     glm::mat4 transformation = glm::rotate(glm::mat4(1.0),1.57079632679f,glm::vec3(-1,0,0));
     transformation = glm::scale(transformation, glm::vec3(0.5,0.5,10.0));
     
-    getUnitCone(tmp_x, tmp_n, tmp_tex, 20, 20);
+    getUnitCone(tmp_x, tmp_n, tmp_tex, strips, slices);
     for(size_t i=0; i<tmp_x.size(); ++i) {
         m_positions.push_back(glm::vec3(transformation*glm::vec4(tmp_x[i],1.0)));
         m_normals.push_back(normalize(glm::vec3(transformation*glm::vec4(tmp_n[i],1.0))));
@@ -36,10 +36,10 @@ TexturedSapinRenderable::TexturedSapinRenderable(
     //Ajout des branches du sapin
     srand(time(NULL));
     double start = 2.5;
-    double nb_branches = 40;
+    double nb_branches = 30;
     double pas = (10.0-start)/nb_branches;
     float aleat = 0.0f;
-    for (int i=0; i<nb_branches; ++i) {
+    for (int i=0; i<nb_branches-5; ++i) {
         transformation = glm::translate(glm::mat4(1.0), glm::vec3(0.0, start+pas*i, 0.0));
         aleat += (float)((rand()%3141) +1570)/1000.0f;
         transformation = glm::rotate(transformation, aleat, glm::vec3(0.0, 1.0, 0.0));
@@ -102,14 +102,14 @@ TexturedSapinRenderable::TexturedSapinRenderable(
 }
 
 void TexturedSapinRenderable::create_leaf(glm::mat4 &transfo) {
-    int precision = 10;
+    int precision = 5;
     float theta = 0.7f;
-    double x_branche = 0.2;
+    double x_branche = 0.15;
     double init_width = 7.0;
     double init_height = -6.0;
     //On trace un côté de la branche
     double pas = (1.0 - x_branche)/precision;
-    double ampli_y = (double)((rand()%400)+900.0)/1000.0;
+    double ampli_y = 0.5*(double)((rand()%400)+900.0)/1000.0;
     for (int i=0; i<precision; i++) {
         m_positions.push_back(glm::vec3(transfo*glm::vec4(0,0,x_branche+pas*i,1.0)));
         m_normals.push_back(normalize(glm::vec3(transfo*glm::vec4(0,1,0,1.0))));
@@ -141,7 +141,7 @@ void TexturedSapinRenderable::create_leaf(glm::mat4 &transfo) {
     }
     //On trace un côté de la branche
     double pas_x = (1.0 - x_branche)/precision;
-    ampli_y = (double)((rand()%400)+900.0)/1000.0;
+    ampli_y = 0.5*(double)((rand()%400)+900.0)/1000.0;
     for (int i=0; i<precision; i++) {
         m_positions.push_back(glm::vec3(transfo*glm::vec4(0,0,x_branche+pas*i,1.0)));
         m_normals.push_back(normalize(glm::vec3(transfo*glm::vec4(0,1,0,1.0))));
@@ -276,7 +276,7 @@ void getUnitCone(std::vector<glm::vec3>& positions, std::vector<glm::vec3>& norm
     //Lateral surface
     for(int i=0; i<slices; ++i)
     {
-        for(int j=0; j<strips; ++j)
+        for(int j=0; j<strips-1; ++j)
         {
             double curr_theta = i*(2.0*M_PI/(double)slices);
             double curr_u = j*(height/(double)strips);
@@ -284,6 +284,8 @@ void getUnitCone(std::vector<glm::vec3>& positions, std::vector<glm::vec3>& norm
             double next_u = (j+1)*(height/(double)strips);
             double factor1 = (height-curr_u)/height;
             double factor2 = (height-next_u)/height;
+            if (j == strips-2)
+                factor2 = 0;
             double next_tex = (double)(i%(slices/2)+1)/slices;
             double curr_tex = (double)(i%(slices/2))/slices;
 
