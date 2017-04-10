@@ -59,6 +59,7 @@ public:
    * @param program The shader program used to render the force applied to particles.
    * @param forceField The force field to control with user inputs.
    */
+  ControlledForceFieldRenderable(ShaderProgramPtr program,ConstantForceFieldPtr forceField);
   ControlledForceFieldRenderable(ShaderProgramPtr program,ConstantForceFieldPtr forceField, Camera *camera);
   ~ControlledForceFieldRenderable();
   const float &getAngle();
@@ -74,6 +75,7 @@ private:
   ConstantForceFieldPtr m_force;
 
   Camera* m_camera;
+  unsigned int m_c_defined;
 
   std::vector<glm::vec3> m_positions;
   std::vector<glm::vec4> m_colors;

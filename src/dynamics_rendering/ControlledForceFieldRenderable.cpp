@@ -40,13 +40,50 @@ void ControlledForceFieldStatus::clear()
     turning_right =  false;
 }
 
+ControlledForceFieldRenderable::ControlledForceFieldRenderable(ShaderProgramPtr program,ConstantForceFieldPtr forceField)
+    : HierarchicalRenderable(program),
+    m_force(forceField), m_pBuffer(0), m_cBuffer(0), m_nBuffer(0)
+{
+	m_c_defined = 0;
+    glm::vec3 initial_direction(1,0,0);
+    m_status = ControlledForceFieldStatus(initial_direction);
+
+    //Create geometric data to display an arrow representing the movement of the particle
+    const std::vector<ParticlePtr>& particles = m_force->getParticles();
+    m_positions.clear();
+    m_colors.clear();
+    m_normals.clear();
+
+    for (ParticlePtr p : particles) {
+        m_positions.push_back(p->getPosition());
+        m_positions.push_back(p->getPosition() + m_status.movement);
+        m_colors.push_back(glm::vec4(1.0,0.0,0.0,1.0));
+        m_colors.push_back(glm::vec4(1.0,0.0,0.0,1.0));
+        m_normals.push_back(glm::vec3(1.0,0.0,0.0));
+        m_normals.push_back(glm::vec3(1.0,0.0,0.0));
+    }
+
+    //Create buffers
+    glGenBuffers(1, &m_pBuffer); //vertices
+    glGenBuffers(1, &m_cBuffer); //colors
+    glGenBuffers(1, &m_nBuffer); //normals
+
+    //Activate buffer and send data to the graphics card
+    glcheck(glBindBuffer(GL_ARRAY_BUFFER, m_pBuffer));
+    glcheck(glBufferData(GL_ARRAY_BUFFER, m_positions.size()*sizeof(glm::vec3), m_positions.data(), GL_STATIC_DRAW));
+    glcheck(glBindBuffer(GL_ARRAY_BUFFER, m_cBuffer));
+    glcheck(glBufferData(GL_ARRAY_BUFFER, m_colors.size()*sizeof(glm::vec4), m_colors.data(), GL_STATIC_DRAW));
+    glcheck(glBindBuffer(GL_ARRAY_BUFFER, m_nBuffer));
+    glcheck(glBufferData(GL_ARRAY_BUFFER, m_normals.size()*sizeof(glm::vec3), m_normals.data(), GL_STATIC_DRAW));
+}
+
 ControlledForceFieldRenderable::ControlledForceFieldRenderable(ShaderProgramPtr program,ConstantForceFieldPtr forceField, Camera *camera)
     : HierarchicalRenderable(program),
     m_force(forceField), m_pBuffer(0), m_cBuffer(0), m_nBuffer(0)
 {
 
 	m_camera = camera;
-
+	m_c_defined = 1;
     glm::vec3 initial_direction(1,0,0);
     m_status = ControlledForceFieldStatus(initial_direction);
 
@@ -166,8 +203,8 @@ void ControlledForceFieldRenderable::do_draw()
         m_normals.push_back(glm::vec3(1.0,0.0,0.0));
         m_normals.push_back(glm::vec3(1.0,0.0,0.0));
         //On met à jour la rotation de la particule
-        p->setRotation(m_status.angle);
-		if (!p->isFixed()) {
+        p->setRotation(glm::vec3(m_status.angle,0,0));
+		if (!p->isFixed() && (m_c_defined == 1)) {
 			m_camera->setCharPos(p->getPosition());
 			m_camera->setEyePos(p->getPosition());
 		}
