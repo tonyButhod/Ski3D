@@ -29,6 +29,7 @@
 #include "../include/texturing/BottomLegRenderable.hpp"
 #include "../include/texturing/TopLegRenderable.hpp"
 #include "../include/texturing/BodyRenderable.hpp"
+#include "../include/texturing/JumpRenderable.hpp"
 
 
 void initialize_practical_08_scene(Viewer& viewer)
@@ -149,6 +150,7 @@ void initialize_practical_08_scene(Viewer& viewer)
     skieur->initForcesSkieur(system, systemRenderable, flatShader, mobile);
     
     /*********** End Skieur ***************/
+    plane->addJump(planeRenderable, texShader, 40, 20, 5, 5, 3);
     
     viewer.startAnimation();
 }

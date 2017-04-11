@@ -120,7 +120,7 @@ void DynamicSystem::detectCollisions()
     //Detect skieur plane collisions
     for (ParticleSkieurPtr p : m_skieurs) {
         for (PlanePtr o : m_planeObstacles) {
-            if (testParticlePlane(p, o)) {
+            if (testParticleSkieurPlane(p, o)) {
                 SkieurCollisionPtr c =
                     std::make_shared<SkieurCollision>(p,o,m_restitution);
                 m_collisions.push_back(c);
@@ -140,6 +140,8 @@ void DynamicSystem::detectCollisions()
             }
         }
     }
+    
+    //TODO : Détecter les collision avec les jumps
 }
 
 void DynamicSystem::solveCollisions()

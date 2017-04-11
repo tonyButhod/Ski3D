@@ -4,6 +4,10 @@
 #include <glm/glm.hpp>
 #include <memory>
 
+#include "../texturing/JumpRenderable.hpp"
+#include "../HierarchicalRenderable.hpp"
+#include "../ShaderProgram.hpp"
+
 /**@brief Geometry representation of an infinite plane.
  *
  * Represent an infinite plane.
@@ -67,10 +71,16 @@ public:
      * @return The orthogonal projection of p.
      */
     glm::vec3 projectOnPlane(const glm::vec3& p);
+    
+    void addJump(HierarchicalRenderablePtr parent, ShaderProgramPtr shader, double x, double y, double wx, double wy, double wz);
+    const std::vector<JumpRenderablePtr> & getJumps();
 
 private:
     glm::vec3 m_n; /*!< Plane normal. Points x on the plane satisfy dot(m_n,x)=m_d */
     float m_d; /*!< m_d = dot(m_n,p) for a given point p on the plane */
+    std::vector<JumpRenderablePtr> m_jumps;
+    float m_anglex, m_anglez;
+    glm::vec3 m_origin;
 };
 
 typedef std::shared_ptr<Plane> PlanePtr;

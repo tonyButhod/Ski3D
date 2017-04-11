@@ -19,6 +19,7 @@
 #include "../include/texturing/BottomLegRenderable.hpp"
 #include "../include/texturing/TopLegRenderable.hpp"
 #include "../include/texturing/SkiRenderable.hpp"
+#include "../include/texturing/JumpRenderable.hpp"
 #include <vector>
 #include <glm/glm.hpp>
 

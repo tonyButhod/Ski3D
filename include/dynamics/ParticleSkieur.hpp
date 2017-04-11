@@ -9,6 +9,7 @@
 #define	PARTICLESKIEUR_HPP
 
 #include "./Particle.hpp"
+#include "../texturing/JumpRenderable.hpp"
 
 class ParticleSkieur: public Particle {
     
@@ -17,7 +18,16 @@ public:
             const float& mass, const float& radius);
     virtual ~ParticleSkieur();
     
+    void setJumpCollision(const bool jumpCollision);
+    bool getJumpCollision();
+    
+    void setJump(const JumpRenderablePtr jump);
+    JumpRenderablePtr getJump();
+    
+    
 private:
+    bool m_jumpCollision;
+    JumpRenderablePtr m_jump;
 };
 
 typedef std::shared_ptr<ParticleSkieur> ParticleSkieurPtr;

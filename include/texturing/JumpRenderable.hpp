@@ -1,35 +1,34 @@
 /* 
- * File:   SkiRenderable.hpp
+ * File:   JumpRenderable.hpp
  * Author: buthodgt
  *
  * Created on March 27, 2017, 11:54 AM
  */
 
-#ifndef SKIRENDERABLE_HPP
-#define	SKIRENDERABLE_HPP
+#ifndef JUMPRENDERABLE_HPP
+#define	JUMPRENDERABLE_HPP
 
 #include "./../HierarchicalRenderable.hpp"
 #include "./../lighting/Material.hpp"
-#include "../../include/dynamics_rendering/ControlledSkieur.hpp"
 #include <vector>
 #include <glm/glm.hpp>
 
-class SkiRenderable : public HierarchicalRenderable
+class JumpRenderable : public HierarchicalRenderable
 {
 public :
-    ~SkiRenderable();
-    SkiRenderable(ShaderProgramPtr shaderProgram);
+    ~JumpRenderable();
+    JumpRenderable(ShaderProgramPtr shaderProgram);
     void setMaterial(const MaterialPtr& material);
-    void setControlledSkieur(ControlledSkieurPtr controlledSkieur);
-    void setPosRepos(glm::mat4 pos);
-
+    void setCornerMin(glm::vec3 &corner);
+    void setCornerMax(glm::vec3 &corner);
+    void setNormal(glm::vec3 &normal);
+    const glm::vec3 & getCornerMax();
+    const glm::vec3 & getCornerMin();
+    const glm::vec3 & getNormal();
 private:
     void do_draw();
     void do_animate(float time);
     void do_keyPressedEvent(sf::Event& e);
-
-    ControlledSkieurPtr m_controlledSkieur;
-    glm::mat4 m_posRepos = glm::mat4(1.0);
     
     std::vector< glm::vec3 > m_positions;
     std::vector< glm::vec3 > m_normals;
@@ -45,9 +44,15 @@ private:
     unsigned int m_filterOption;
 
     MaterialPtr m_material;
+    glm::vec3 m_cornerMin;
+    glm::vec3 m_cornerMax;
+    glm::vec3 m_n;
 };
 
-typedef std::shared_ptr<SkiRenderable> SkiRenderablePtr;
+typedef std::shared_ptr<JumpRenderable> JumpRenderablePtr;
 
-#endif	/* SKIRENDERABLE_HPP */
+void constructJump(std::vector<glm::vec3> &pos, std::vector<glm::vec3> &norm, 
+        std::vector<glm::vec2> &tex);
+
+#endif	/* JUMPRENDERABLE_HPP */
 
