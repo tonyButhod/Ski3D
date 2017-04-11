@@ -10,7 +10,9 @@ using namespace std;
 Camera::Camera()
     : m_view{ glm::lookAt( glm::vec3{0, 0, -5}, glm::vec3{}, glm::vec3{0,1,0}) },
       m_fov{ 1.04f }, m_ratio{ 1.0f }, m_znear{ 1.0f }, m_zfar{ 100.0f },
-      m_mouseBehavior{ ARCBALL_BEHAVIOR }
+      m_mouseBehavior{ ARCBALL_BEHAVIOR },
+	  m_char_pos(glm::vec3(0,0,0)),
+	  m_eye_pos(glm::vec3(0, -15, 15))
 {}
 
 Camera::~Camera()
@@ -32,6 +34,25 @@ void Camera::setViewMatrix(const glm::mat4& view)
     m_view = view;
 }
 
+glm::vec3 Camera::getCharPos() const
+{
+	return m_char_pos;
+}
+
+void Camera::setCharPos(const glm::vec3 new_pos)
+{
+	m_char_pos = new_pos;
+}
+
+glm::vec3 Camera::getEyePos() const
+{
+	return m_char_pos;
+}
+
+void Camera::setEyePos(const glm::vec3 new_pos)
+{
+	m_eye_pos = new_pos;
+}
 glm::vec3 Camera::getPosition() const
 {
     return -glm::vec3( m_view[3] ) * glm::mat3( m_view );

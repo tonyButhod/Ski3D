@@ -81,6 +81,27 @@ public:
      * @param view The new view matrix. */
     void setViewMatrix(const glm::mat4& view);
 
+	/**@brief Read access to the position of the main character
+	 * 
+	 */
+	glm::vec3 getCharPos() const;
+
+	/*@brief Write to the main character position 
+	 *
+	 */
+	void setCharPos(const glm::vec3 new_pos);
+	
+	/**@brief Read access to the position of the eye
+	 * 
+	 */
+	glm::vec3 getEyePos() const;
+
+	/*@brief Write to the eye position 
+	 *
+	 */
+	void setEyePos(const glm::vec3 new_pos);
+
+
     /**@brief Read access to the camera world position.
      *
      * Allow a read-only access to the camera position in world coordinates.
@@ -281,6 +302,8 @@ private:
     float m_ratio;
     float m_znear;
     float m_zfar;
+	glm::vec3 m_char_pos;
+	glm::vec3 m_eye_pos;
     glm::mat4 m_view;
     glm::mat4 m_projection;
 };
