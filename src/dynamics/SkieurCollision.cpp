@@ -16,6 +16,7 @@ void SkieurCollision::do_solveCollision()
     //Don't process fixed particles (ground plane is assumed fixed)
     if (m_particle->isFixed())
         return;
+
     glm::vec3 normal(0.0,0.0,1.0);
     if (m_particle->getJumpCollision()) {
         //On calcule les collisions avec les sauts
@@ -37,9 +38,10 @@ void SkieurCollision::do_solveCollision()
         float dist = std::abs(glm::dot(m_particle->getPosition(), normal)-m_plane->distanceToOrigin());
         m_particle->setPosition(m_particle->getPosition() + (m_particle->getRadius() - dist)*normal);
     }
-    
+
     float proj_v = (1.0f + m_restitution) * glm::dot(normal, m_particle->getVelocity());
     m_particle->setVelocity(m_particle->getVelocity() - proj_v*normal);
+
     //Pour que le skieur glisse dans la bonne direction
     glm::vec3 rotation = m_particle->getRotation();
     glm::vec3 ortho_ski = glm::normalize(glm::vec3(-sin(rotation[2]), cos(rotation[2]), 0.0));

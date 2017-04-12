@@ -14,6 +14,7 @@ class MapRenderable : public Renderable
         MapRenderable(ShaderProgramPtr program, const std::string& textureFilename);
 
         void setMaterial(const MaterialPtr& material);
+        void generateSapin(Viewer& viewer, ShaderProgramPtr texShader);
 
     private:
         void do_draw();

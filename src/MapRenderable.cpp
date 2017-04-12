@@ -1,17 +1,20 @@
-#include "./../include/MapRenderable.hpp"
-#include "./../include/gl_helper.hpp"
-#include "./../include/log.hpp"
-
-#include "../include/Viewer.hpp"
-
 #include <glm/gtc/type_ptr.hpp>
 #include <GL/glew.h>
 #include <SFML/Graphics/Image.hpp>
 #include <iostream>
 #include <math.h>
 
+#include "./../include/MapRenderable.hpp"
+#include "./../include/gl_helper.hpp"
+#include "./../include/log.hpp"
+
+#include "../include/Viewer.hpp"
+
 #include "../include/noisegen.h"
 #include "../teachers/MeshRenderable.hpp"
+
+#include "../include/texturing/TexturedSapinRenderable.hpp"
+
 
 
 #define MIN_X   -400
@@ -34,15 +37,18 @@
 #define MAX_HEIGHT  100
 #define FREQUENCE   100
 
+#define RARETE_SAPIN  180
+
+
 
 
 int getOffset(int y)
 {
-    return (int)(200+(float)0.5*(float)y);
+    return (int)(200+(float)-0.5*(float)y);
 }
 
 
-int getNoise(int x, int y)
+int getNoise(int y, int x)
 {
     double height;
 
@@ -243,4 +249,37 @@ void MapRenderable::setMaterial(const MaterialPtr& material)
 
 void MapRenderable::do_animate(float time)
 {
+}
+
+
+
+// Fonction permettant de générer des sapins sur la map, une fois que celle-ci a été générée
+void MapRenderable::generateSapin(Viewer& viewer, ShaderProgramPtr texShader)
+{
+    int i, j;
+
+    std::string filename = "../textures/sapin_snow.png";
+    MaterialPtr normalMat = Material::Normal();
+    glm::mat4 localTransformation;
+
+    for(i=MIN_X; i<MAX_X; i += STEP_X)
+    {
+        if(i<MMIN_X || i>MMAX_X)
+        {
+            for(j=MIN_Y; j<MAX_Y; j += STEP_X)
+            {
+                int r = rand() % RARETE_SAPIN;
+
+                if(r == 0)
+                {
+                    // On genere le sapin dans la zone
+                    TexturedSapinRenderablePtr texSapin = std::make_shared<TexturedSapinRenderable>(texShader, filename);
+                    texSapin->setMaterial(normalMat);
+                    localTransformation = glm::translate(glm::mat4(1.0), glm::vec3(i,j,getNoise(i, j)));
+                    texSapin->setLocalTransform(localTransformation);
+                    viewer.addRenderable(texSapin);
+                }
+            }
+        }
+    }
 }
