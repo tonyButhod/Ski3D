@@ -3,8 +3,11 @@
 
 #include "lighting/Material.hpp"
 #include "Renderable.hpp"
+#include "./dynamics/Plane.hpp"
+#include "./dynamics_rendering/DynamicSystemRenderable.hpp"
 #include <vector>
 #include <glm/glm.hpp>
+
 
 class MapRenderable : public Renderable
 {
@@ -15,6 +18,7 @@ class MapRenderable : public Renderable
 
         void setMaterial(const MaterialPtr& material);
         void generateSapin(Viewer& viewer, ShaderProgramPtr texShader);
+        void generateTremplin(PlanePtr plane, DynamicSystemRenderablePtr systemRenderable, ShaderProgramPtr texShader);
 
     private:
         void do_draw();

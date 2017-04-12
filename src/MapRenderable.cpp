@@ -14,6 +14,9 @@
 #include "../teachers/MeshRenderable.hpp"
 
 #include "../include/texturing/TexturedSapinRenderable.hpp"
+#include "../include/dynamics/Plane.hpp"
+
+#include "../include/dynamics_rendering/DynamicSystemRenderable.hpp"
 
 
 
@@ -33,14 +36,14 @@
 #define STEP_X  4
 #define STEP_Y  20
 
-#define SEED        51
+#define SEED        56
 #define MAX_HEIGHT  100
 #define FREQUENCE   100
 
-#define RARETE_SAPIN  500
-#define MAX_SAPIN     400
-
-
+#define RARETE_SAPIN  1000
+#define MAX_SAPIN     100
+#define RARETE_TREMPLIN  80
+#define MAX_TREMPLIN  8
 
 
 int getOffset(int y)
@@ -362,4 +365,35 @@ void MapRenderable::generateSapin(Viewer& viewer, ShaderProgramPtr texShader)
             }
         }
     }
+}
+
+
+// Fonction permettant de générer des tremplins sur la map, une fois que celle-ci a été générée
+void MapRenderable::generateTremplin(PlanePtr plane, DynamicSystemRenderablePtr systemRenderable, ShaderProgramPtr texShader)
+{
+    int i, j;
+
+    int nbTremplin = 0;
+
+    srand(time(NULL));
+
+    std::string filename = "../textures/sapin_snow.png";
+    MaterialPtr normalMat = Material::Normal();
+    glm::mat4 localTransformation;
+
+    //for(j=MMIN_X+STEP_X*2; j<=MMAX_X-STEP_X*2; j += STEP_X)
+    //{
+        for(i=0; i<MAX_TREMPLIN; i++)
+        {
+            int r = (rand()%(80)) +10;
+
+            //if(r == 0 && nbTremplin < MAX_TREMPLIN)
+            {
+                // On genere le sapin dans la zone
+                //plane->addJump(systemRenderable, texShader, i, j, 10, 10, 8);
+                plane->addJump(systemRenderable, texShader, i*100, -r, 10, 10, 8);
+                nbTremplin++;
+            }
+        }
+    //}
 }

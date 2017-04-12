@@ -24,9 +24,6 @@
 
 
 
-
-
-
 void initialize_practical_10_scene(Viewer& viewer)
 {
 
@@ -97,6 +94,8 @@ void initialize_practical_10_scene(Viewer& viewer)
     //glm::vec3 p4(50.0, 400.0, 400.0);
     PlanePtr plane = std::make_shared<Plane>(p1, p2, p3);
     system->addPlaneObstacle(plane);
+
+    map->generateTremplin(plane, systemRenderable, texShader);
 
     //Création de la particule associée au skieur
     glm::vec3 px(-380.0, 0.0, 400.0);
