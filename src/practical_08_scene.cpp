@@ -29,6 +29,7 @@
 #include "../include/texturing/BottomLegRenderable.hpp"
 #include "../include/texturing/TopLegRenderable.hpp"
 #include "../include/texturing/BodyRenderable.hpp"
+#include "../include/texturing/JumpRenderable.hpp"
 
 
 void initialize_practical_08_scene(Viewer& viewer)
@@ -71,7 +72,7 @@ void initialize_practical_08_scene(Viewer& viewer)
     
     //Activate collision detection
     system->setCollisionsDetection(true);
-    system->setRestitution(0.0f);
+    system->setRestitution(0.1f);
 
     //Create a renderable associated to the dynamic system
     //This renderable is responsible for calling DynamicSystem::computeSimulationStep()in the animate() function
@@ -123,8 +124,8 @@ void initialize_practical_08_scene(Viewer& viewer)
 
     //Initialize a plane from 3 points and add it to the system as an obstacle
     glm::vec3 p1(-20.0, -20.0, -0.0);
-    glm::vec3 p2(20.0, -20.0, -20.0);
-    glm::vec3 p3(20.0, 20.0, -20.0);
+    glm::vec3 p2(120.0, -20.0, -60.0);
+    glm::vec3 p3(120.0, 20.0, -60.0);
     glm::vec3 p4(-20.0, 20.0, -0.0);
     PlanePtr plane = std::make_shared<Plane>(p1, p2, p3);
     system->addPlaneObstacle(plane);
@@ -141,6 +142,7 @@ void initialize_practical_08_scene(Viewer& viewer)
     px = glm::vec3(0.0,4.0,0.0);
     ParticleSkieurPtr mobile = std::make_shared<ParticleSkieur>( px, pv, pm, pr);
     system->addSkieur( mobile );
+    viewer.getCamera().setParticle(mobile);
     
     //Skieur
     SkieurRenderablePtr skieur = std::make_shared<SkieurRenderable>(texShader, systemRenderable, mobile);
@@ -149,6 +151,7 @@ void initialize_practical_08_scene(Viewer& viewer)
     skieur->initForcesSkieur(system, systemRenderable, flatShader, mobile);
     
     /*********** End Skieur ***************/
+    plane->addJump(planeRenderable, texShader, 40, 20, 5, 5, 3);
     
     viewer.startAnimation();
 }

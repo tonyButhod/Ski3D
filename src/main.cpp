@@ -13,6 +13,7 @@ void initialize_practical_06_scene(Viewer& viewer);
 void initialize_practical_07_scene(Viewer& viewer, unsigned int scene_to_load = 71);
 void initialize_practical_08_scene(Viewer& viewer);
 void initialize_practical_09_scene(Viewer& viewer);
+void initialize_practical_10_scene(Viewer& viewer);
 
 
 int main(int argc, char* argv[])
@@ -63,6 +64,9 @@ int main(int argc, char* argv[])
             break;
         case 9:
             initialize_practical_09_scene(viewer);
+            break;
+        case 10:
+            initialize_practical_10_scene(viewer);
             break;
         default:
             LOG(fatal, "unknown practical number " << scene_to_load);

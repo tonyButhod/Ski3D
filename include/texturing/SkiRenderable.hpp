@@ -1,5 +1,5 @@
 /* 
- * File:   BottomLegRenderable.hpp
+ * File:   SkiRenderable.hpp
  * Author: buthodgt
  *
  * Created on March 27, 2017, 11:54 AM

@@ -8,20 +8,25 @@
 using namespace std;
 
 Camera::Camera()
-    : m_view{ glm::lookAt( glm::vec3{0, 0, -5}, glm::vec3{}, glm::vec3{0,1,0}) },
+    : m_view{ glm::lookAt( glm::vec3{0.0, 0.0, -5.0}, glm::vec3{}, glm::vec3{0.0,1.0,0.0}) },
       m_fov{ 1.04f }, m_ratio{ 1.0f }, m_znear{ 1.0f }, m_zfar{ 100.0f },
       m_mouseBehavior{ ARCBALL_BEHAVIOR },
-	  m_char_pos(glm::vec3(0,0,0)),
-	  m_eye_pos(glm::vec3(0, -15, 15))
-{}
+	  m_char_pos(glm::vec3(0.0,0.0,0.0)),
+	  m_eye_pos(glm::vec3(0.0, -15.0, 15.0))
+{
+          m_particle = NULL;
+}
 
 Camera::~Camera()
 {
-
 }
 
 void Camera::animate(float time)
 {
+    if (m_particle != NULL) {
+        glm::vec3 pos = m_particle->getPosition();
+	setViewMatrix(glm::lookAt(pos + glm::vec3(-15.0,0.0,15.0), pos, glm::vec3(0.0,0.0,1.0)));
+    }
 }
 
 const glm::mat4& Camera::viewMatrix() const
@@ -231,4 +236,13 @@ void Camera::update( float dx, float dy )
     default:
         assert(false);
     }
+}
+
+    
+void Camera::setParticle(ParticlePtr particle) {
+    m_particle = particle;
+}
+
+ParticlePtr Camera::getParticle() {
+    return m_particle;
 }

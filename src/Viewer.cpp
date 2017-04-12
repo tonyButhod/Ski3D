@@ -132,10 +132,6 @@ void Viewer::draw()
         r->unbindShaderProgram();
     }
 
-	// Refresh the camera
-	m_camera.setViewMatrix(glm::lookAt(m_camera.getCharPos() + glm::vec3(0,-15,15), m_camera.getCharPos(), glm::vec3(0,0,1) ));
-
-
     //Refresh the viewer.m_window
     if( clock::now() < m_modeInformationTextDisappearanceTime )
     {
