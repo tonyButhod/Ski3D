@@ -96,8 +96,8 @@ void initialize_practical_09_scene(Viewer& viewer)
     //Lighted Cube
     LightedCubeRenderablePtr ground
         = std::make_shared<LightedCubeRenderable>(phongShader, pearl);
-    localTransformation = glm::scale(glm::mat4(1.0), glm::vec3(20.0,0.2,20.0));
-    localTransformation *= glm::translate(glm::mat4(1.0), glm::vec3(0.0,-0.5,0.0));
+    localTransformation = glm::scale(glm::mat4(1.0), glm::vec3(20.0,20.0,0.2));
+    localTransformation *= glm::translate(glm::mat4(1.0), glm::vec3(0.0,0.0,-0.5));
     ground->setLocalTransform(localTransformation);
     ground->setMaterial(pearl);
     viewer.addRenderable(ground);

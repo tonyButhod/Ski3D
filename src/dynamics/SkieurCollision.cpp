@@ -38,7 +38,7 @@ void SkieurCollision::do_solveCollision()
         m_particle->setPosition(m_particle->getPosition() + (m_particle->getRadius() - dist)*normal);
     }
     
-    float proj_v = (1.0f + m_restitution) * glm::dot(normal, m_particle->getVelocity());
+    float proj_v = glm::dot(normal, m_particle->getVelocity());
     m_particle->setVelocity(m_particle->getVelocity() - proj_v*normal);
     //Pour que le skieur glisse dans la bonne direction
     glm::vec3 rotation = m_particle->getRotation();

@@ -13,7 +13,7 @@ class TexturedSapinRenderable : public HierarchicalRenderable
 public :
     ~TexturedSapinRenderable();
     TexturedSapinRenderable(ShaderProgramPtr shaderProgram, const std::string& textureFilename);
-    void create_leaf(glm::mat4 &transfo);
+    void create_leaf(glm::mat4 &parentTransfo);
     void setMaterial(const MaterialPtr& material);
 
 private:
