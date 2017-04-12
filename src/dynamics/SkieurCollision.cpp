@@ -55,7 +55,7 @@ void SkieurCollision::do_solveCollision()
     float proj_ski = glm::dot(m_particle->getVelocity(), ortho_ski);
     m_particle->setVelocity(m_particle->getVelocity() - proj_ski*ortho_ski);
     //Réaction tangetielle du suppport.
-    float frottement = 0.001f;
+    float frottement = 0.002f;
     m_particle->setVelocity((1.0f - frottement) * m_particle->getVelocity());
     //On enregistre la normale au sol lors de la collision pour orienter le skieur.
     glm::vec3 proj_n = normal;

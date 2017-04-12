@@ -31,7 +31,7 @@ SkiRenderable::SkiRenderable(
         m_origTexCoords.push_back(tmp_tex[i]);
         m_texCoords.push_back(tmp_tex[i]);
     }
-    
+
     // === PART 1: Vertex attributes, except texture coordinates
     //Create buffers
     glGenBuffers(1, &m_pBuffer); //vertices
@@ -52,7 +52,7 @@ SkiRenderable::SkiRenderable(
     // now handle the "texture image" itself
     // load the image (here using the sfml library)
     sf::Image image;
-    image.loadFromFile("../textures/sapin_snow.png");
+    image.loadFromFile("../textures/grass_texture.png");
     // sfml inverts the v axis...
     // Hence, flip it to put the image in OpenGL convention: lower left corner is (0,0)
     image.flipVertically();
@@ -90,7 +90,7 @@ void SkiRenderable::do_draw()
     const float &angle = (m_controlledSkieur)?m_controlledSkieur->getAngle():0;
     glm::mat4 rotate = glm::rotate(glm::mat4(1.0), angle, glm::vec3(1.0, 0.0, 0.0));
     setParentTransform(m_posRepos*rotate);
-    
+
     //Locations
     int modelLocation = m_shaderProgram->getUniformLocation("modelMat");
     int nitLocation = m_shaderProgram->getUniformLocation("NIT");

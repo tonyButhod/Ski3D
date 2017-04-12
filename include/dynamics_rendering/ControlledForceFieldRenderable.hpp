@@ -73,6 +73,8 @@ private:
   ControlledForceFieldStatus m_status;
   ConstantForceFieldPtr m_force;
 
+  Camera* m_camera;
+
   std::vector<glm::vec3> m_positions;
   std::vector<glm::vec4> m_colors;
   std::vector<glm::vec3> m_normals;
