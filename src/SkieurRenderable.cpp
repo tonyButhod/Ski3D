@@ -76,9 +76,9 @@ void SkieurRenderable::do_animate(float time)
 void SkieurRenderable::do_keyPressedEvent(sf::Event& e) {
     switch (e.key.code) {
         case sf::Keyboard::F6:
-            m_particle->setPosition(glm::vec3(0,0,0));
-            m_particle->setVelocity(glm::vec3(0,0,0));
-            m_particle->setRotation(glm::vec3(0,0,0));
+            m_particle->setPosition(glm::vec3(0.0,0.0,0.0));
+            m_particle->setVelocity(glm::vec3(0.0,0.0,0.0));
+            m_particle->setRotation(glm::vec3(0.0,0.0,0.0));
     }
 }
 
@@ -119,6 +119,6 @@ void SkieurRenderable::initForcesSkieur(DynamicSystemPtr system, HierarchicalRen
     //Initialize a force field that apply to all the particles of the system to simulate gravity
     //Add it to the system as a force field
     ConstantForceFieldPtr gravityForceField
-        = std::make_shared<ConstantForceField>(vParticle, glm::vec3{0, 0, -9.81} );
+        = std::make_shared<ConstantForceField>(vParticle, glm::vec3{0.0, 0.0, -9.81} );
     system->addForceField(gravityForceField);
 }

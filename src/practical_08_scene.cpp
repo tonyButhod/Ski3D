@@ -142,6 +142,7 @@ void initialize_practical_08_scene(Viewer& viewer)
     px = glm::vec3(0.0,4.0,0.0);
     ParticleSkieurPtr mobile = std::make_shared<ParticleSkieur>( px, pv, pm, pr);
     system->addSkieur( mobile );
+    viewer.getCamera().setParticle(mobile);
     
     //Skieur
     SkieurRenderablePtr skieur = std::make_shared<SkieurRenderable>(texShader, systemRenderable, mobile);

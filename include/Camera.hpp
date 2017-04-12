@@ -9,6 +9,7 @@
  */
 
 #include <glm/glm.hpp>
+#include "./dynamics/Particle.hpp"
 /**@brief Manage the Camera.
  *
  * We consider a camera to be defined by two 4x4 matrices:
@@ -294,6 +295,9 @@ public:
      */
     void update( float dx, float dy );
     ///@}
+    
+    void setParticle(ParticlePtr particle);
+    ParticlePtr getParticle();
 private:
 
     /** @name Private members */
@@ -302,10 +306,12 @@ private:
     float m_ratio;
     float m_znear;
     float m_zfar;
-	glm::vec3 m_char_pos;
-	glm::vec3 m_eye_pos;
+    glm::vec3 m_char_pos;
+    glm::vec3 m_eye_pos;
     glm::mat4 m_view;
     glm::mat4 m_projection;
+    
+    ParticlePtr m_particle;
 };
 
 #endif

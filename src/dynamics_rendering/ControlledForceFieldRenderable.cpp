@@ -40,12 +40,10 @@ void ControlledForceFieldStatus::clear()
     turning_right =  false;
 }
 
-ControlledForceFieldRenderable::ControlledForceFieldRenderable(ShaderProgramPtr program,ConstantForceFieldPtr forceField, Camera *camera)
+ControlledForceFieldRenderable::ControlledForceFieldRenderable(ShaderProgramPtr program,ConstantForceFieldPtr forceField)
     : HierarchicalRenderable(program),
     m_force(forceField), m_pBuffer(0), m_cBuffer(0), m_nBuffer(0)
 {
-
-	m_camera = camera;
 
     glm::vec3 initial_direction(1,0,0);
     m_status = ControlledForceFieldStatus(initial_direction);
@@ -166,11 +164,6 @@ void ControlledForceFieldRenderable::do_draw()
         m_normals.push_back(glm::vec3(1.0,0.0,0.0));
         m_normals.push_back(glm::vec3(1.0,0.0,0.0));
         //On met à jour la rotation de la particule
-        p->setRotation(m_status.angle);
-		if (!p->isFixed()) {
-			m_camera->setCharPos(p->getPosition());
-			m_camera->setEyePos(p->getPosition());
-		}
         glm::vec3 curr_rot = p->getRotation();
         glm::vec3 new_rot = glm::vec3(curr_rot[0], curr_rot[1], m_status.angle);
         p->setRotation(new_rot);
