@@ -88,7 +88,7 @@ void initialize_practical_10_scene(Viewer& viewer)
     map->setModelMatrix(glm::translate(glm::mat4(), glm::vec3(0.0, 0.0, 0.0)));
     map->setMaterial(pearl);
     viewer.addRenderable(map);
-    //map->generateSapin(viewer, texShader);
+    map->generateSapin(viewer, texShader);
 
     //Initialize a plane from 3 points and add it to the system as an obstacle
     glm::vec3 p1(-400.0, 50.0, 400.0);
