@@ -38,13 +38,19 @@ void SkieurCollision::do_solveCollision()
         float dist = std::abs(glm::dot(m_particle->getPosition(), normal)-m_plane->distanceToOrigin());
         m_particle->setPosition(m_particle->getPosition() + (m_particle->getRadius() - dist)*normal);
     }
-
+    //On met à jour al vitesse
     float proj_v = glm::dot(normal, m_particle->getVelocity());
-
     m_particle->setVelocity(m_particle->getVelocity() - proj_v*normal);
-
-    //Pour que le skieur glisse dans la bonne direction
+    
+    // On ramène la rotation en x et y entre [-pi;pi]
     glm::vec3 rotation = m_particle->getRotation();
+    rotation[0] = fmod(rotation[0]+3.14159265359f, 6.28318530718f)-3.14159265359f;
+    if (rotation[0] < -3.14159265359f)
+        rotation[0] += 6.28318530718f;
+    rotation[1] = fmod(rotation[1]+3.14159265359f, 6.28318530718f)-3.14159265359f;
+    if (rotation[1] < -3.14159265359f)
+        rotation[1] += 6.28318530718f;
+    //Pour que le skieur glisse dans la bonne direction
     glm::vec3 ortho_ski = glm::normalize(glm::vec3(-sin(rotation[2]), cos(rotation[2]), 0.0));
     float proj_ski = glm::dot(m_particle->getVelocity(), ortho_ski);
     m_particle->setVelocity(m_particle->getVelocity() - proj_ski*ortho_ski);
@@ -52,9 +58,16 @@ void SkieurCollision::do_solveCollision()
     float frottement = 0.001f;
     m_particle->setVelocity((1.0f - frottement) * m_particle->getVelocity());
     //On enregistre la normale au sol lors de la collision pour orienter le skieur.
+    glm::vec3 proj_n = normal;
+    proj_n[2] = 0.0;
+    float anglex = 0.0f;
+    if (glm::length(proj_n) != 0)
+        anglex = acos(glm::dot(glm::normalize(proj_n), glm::vec3(1.0,0.0,0.0)));
     float coef = (normal[0]<0)?-1.0f:1.0f;
-    float anglez = acos(glm::dot(normal,glm::vec3(0,0,1))) - coef*rotation[1];
-    m_particle->setRotation(m_particle->getRotation() + 0.1f*glm::vec3(0.0, coef*anglez, 0));
+    float anglez = acos(glm::dot(normal,glm::vec3(0,0,1)));
+    float diffx = sin(anglex)*anglez - rotation[0];
+    float diffy = cos(anglex)*anglez - rotation[1];
+    m_particle->setRotation(rotation + 0.1f*glm::vec3(diffx, diffy, 0));
 }
 
 

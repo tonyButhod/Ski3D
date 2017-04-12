@@ -1,9 +1,6 @@
 #include "./../../include/dynamics_rendering/ControlledSkieur.hpp"
 #include "./../../include/gl_helper.hpp"
 #include "./../../include/log.hpp"
-#include <glm/gtc/type_ptr.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <GL/glew.h>
 
 ControlledSkieurStatus::ControlledSkieurStatus()
 {
@@ -22,8 +19,15 @@ void ControlledSkieurStatus::clear()
     max_angle = 0.9f;
     angularSpeedDown = 4.0;
     angularSpeedUp = 5.5;
+    angularSpeed = glm::vec3(4.0,4.0,2.0);
     
     enter = false;
+    left = false;
+    right = false;
+    front = false;
+    back = false;
+    lincolnL = false;
+    lincolnR = false;
 }
 
 ControlledSkieur::ControlledSkieur(ShaderProgramPtr program, ParticleSkieurPtr particle)
@@ -40,6 +44,18 @@ void ControlledSkieur::do_keyPressedEvent(sf::Event& e)
 {
     if (e.key.code == sf::Keyboard::Return) {
         m_status.enter = true;
+    } else if (e.key.code == sf::Keyboard::Left) {
+        m_status.left = true;
+    } else if (e.key.code == sf::Keyboard::Right) {
+        m_status.right = true;
+    } else if (e.key.code == sf::Keyboard::Up) {
+        m_status.front = true;
+    } else if (e.key.code == sf::Keyboard::Down) {
+        m_status.back = true;
+    } else if (e.key.code == sf::Keyboard::J) {
+        m_status.lincolnL = true;
+    } else if (e.key.code == sf::Keyboard::K) {
+        m_status.lincolnR = true;
     }
 }
 
@@ -47,6 +63,18 @@ void ControlledSkieur::do_keyReleasedEvent(sf::Event& e)
 {
     if (e.key.code == sf::Keyboard::Return) {
         m_status.enter = false;
+    } else if (e.key.code == sf::Keyboard::Left) {
+        m_status.left = false;
+    } else if (e.key.code == sf::Keyboard::Right) {
+        m_status.right = false;
+    } else if (e.key.code == sf::Keyboard::Up) {
+        m_status.front = false;
+    } else if (e.key.code == sf::Keyboard::Down) {
+        m_status.back = false;
+    } else if (e.key.code == sf::Keyboard::J) {
+        m_status.lincolnL = false;
+    } else if (e.key.code == sf::Keyboard::K) {
+        m_status.lincolnR = false;
     }
 }
 
@@ -67,6 +95,41 @@ void ControlledSkieur::do_animate(float time)
                 glm::vec3 velocity = m_particle->getVelocity();
                 velocity[2] = m_status.angle*5.0;
                 m_particle->setVelocity(velocity);
+            }
+        }
+        if (m_status.left && !m_status.right) {
+            glm::vec3 rot = m_particle->getRotation();
+            rot[2] += dt * m_status.angularSpeed[2];
+            m_particle->setRotation(rot);
+        } else if (m_status.right && !m_status.left) {
+            glm::vec3 rot = m_particle->getRotation();
+            rot[2] -= dt * m_status.angularSpeed[2];
+            m_particle->setRotation(rot);
+        }
+
+        if (!m_particle->getCollision() && !m_particle->getJumpCollision()) {
+            if (m_status.front && !m_status.back) {
+                glm::vec3 rot = m_particle->getRotation();
+                rot[1] += cos(rot[2]) * dt * m_status.angularSpeed[1];
+                rot[0] += -sin(rot[2]) * dt * m_status.angularSpeed[1];
+                m_particle->setRotation(rot);
+            } else if (m_status.back && !m_status.front) {
+                glm::vec3 rot = m_particle->getRotation();
+                rot[1] -= cos(rot[2]) * dt * m_status.angularSpeed[1];
+                rot[0] -= -sin(rot[2]) * dt * m_status.angularSpeed[1];
+                m_particle->setRotation(rot);
+            }
+
+            if (m_status.lincolnR && !m_status.lincolnL) {
+                glm::vec3 rot = m_particle->getRotation();
+                rot[1] += -sin(rot[2]) * dt * m_status.angularSpeed[0];
+                rot[0] += cos(rot[2]) * dt * m_status.angularSpeed[0];
+                m_particle->setRotation(rot);
+            } else if (m_status.lincolnL && !m_status.lincolnR) {
+                glm::vec3 rot = m_particle->getRotation();
+                rot[1] -= -sin(rot[2]) * dt * m_status.angularSpeed[0];
+                rot[0] -= cos(rot[2]) * dt * m_status.angularSpeed[0];
+                m_particle->setRotation(rot);
             }
         }
     }
