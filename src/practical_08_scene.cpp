@@ -72,7 +72,7 @@ void initialize_practical_08_scene(Viewer& viewer)
     
     //Activate collision detection
     system->setCollisionsDetection(true);
-    system->setRestitution(0.0f);
+    system->setRestitution(0.1f);
 
     //Create a renderable associated to the dynamic system
     //This renderable is responsible for calling DynamicSystem::computeSimulationStep()in the animate() function
@@ -124,8 +124,8 @@ void initialize_practical_08_scene(Viewer& viewer)
 
     //Initialize a plane from 3 points and add it to the system as an obstacle
     glm::vec3 p1(-20.0, -20.0, -0.0);
-    glm::vec3 p2(20.0, -20.0, -20.0);
-    glm::vec3 p3(20.0, 20.0, -20.0);
+    glm::vec3 p2(120.0, -20.0, -60.0);
+    glm::vec3 p3(120.0, 20.0, -60.0);
     glm::vec3 p4(-20.0, 20.0, -0.0);
     PlanePtr plane = std::make_shared<Plane>(p1, p2, p3);
     system->addPlaneObstacle(plane);

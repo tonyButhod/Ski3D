@@ -23,8 +23,7 @@ TexturedSapinRenderable::TexturedSapinRenderable(
     std::vector<glm::vec3> tmp_x, tmp_n;
     std::vector<glm::vec2> tmp_tex;
     unsigned int strips=10, slices=10;
-    glm::mat4 transformation = glm::rotate(glm::mat4(1.0),1.57079632679f,glm::vec3(-1,0,0));
-    transformation = glm::scale(transformation, glm::vec3(0.5,0.5,10.0));
+    glm::mat4 transformation = glm::scale(glm::mat4(1.0), glm::vec3(0.5,0.5,10.0));
     
     getUnitCone(tmp_x, tmp_n, tmp_tex, strips, slices);
     for(size_t i=0; i<tmp_x.size(); ++i) {
@@ -40,9 +39,10 @@ TexturedSapinRenderable::TexturedSapinRenderable(
     double pas = (10.0-start)/nb_branches;
     float aleat = 0.0f;
     for (int i=0; i<nb_branches-5; ++i) {
-        transformation = glm::translate(glm::mat4(1.0), glm::vec3(0.0, start+pas*i, 0.0));
+        transformation = glm::translate(glm::mat4(1.0), glm::vec3(0.0, 0.0, start+pas*i));
         aleat += (float)((rand()%3141) +1570)/1000.0f;
-        transformation = glm::rotate(transformation, aleat, glm::vec3(0.0, 1.0, 0.0));
+        transformation = glm::rotate(transformation, aleat, glm::vec3(0.0, 0.0, 1.0));
+        transformation = glm::rotate(transformation, 1.57079632679f, glm::vec3(0.0, 1.0, 0.0));
         double base = 0.2*(1.0-i/nb_branches);
         transformation = glm::scale(transformation, glm::vec3(base,base,(double)(nb_branches-i)*5.0/nb_branches));
         
@@ -101,9 +101,9 @@ TexturedSapinRenderable::TexturedSapinRenderable(
     glcheck(glBindTexture(GL_TEXTURE_2D, 0));
 }
 
-void TexturedSapinRenderable::create_leaf(glm::mat4 &transfo) {
+void TexturedSapinRenderable::create_leaf(glm::mat4 &parentTransfo) {
+    glm::mat4 transfo = glm::rotate(parentTransfo, 1.57079632679f, glm::vec3(0.0,0.0,1.0));
     int precision = 5;
-    float theta = 0.7f;
     double x_branche = 0.15;
     double init_width = 7.0;
     double init_height = -6.0;

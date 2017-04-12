@@ -8,7 +8,7 @@
 using namespace std;
 
 Camera::Camera()
-    : m_view{ glm::lookAt( glm::vec3{0, 0, -5}, glm::vec3{}, glm::vec3{0,1,0}) },
+    : m_view{ glm::lookAt( glm::vec3{0.0, 0.0, -5.0}, glm::vec3{}, glm::vec3{0.0,1.0,0.0}) },
       m_fov{ 1.04f }, m_ratio{ 1.0f }, m_znear{ 1.0f }, m_zfar{ 100.0f },
       m_mouseBehavior{ ARCBALL_BEHAVIOR },
 	  m_char_pos(glm::vec3(0.0,0.0,0.0)),
