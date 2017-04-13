@@ -25,7 +25,7 @@ void initialize_practical_02_scene(Viewer& viewer)
     Pole->setModelMatrix(glm::translate(glm::mat4(), glm::vec3(-1.5, 0.0, 0.0)));
     viewer.addRenderable(Pole);
 	
-	viewer.setAnimationLoop(true, 2*3.14159265/8);
+	viewer.setAnimationLoop(true,2*3.14159265 );
 	viewer.startAnimation();
 
 }

@@ -23,7 +23,7 @@
 	float x = 0.0, y = 0.0;
 	int a = 20;	
 	// Processing the color of the cylinder
-	glm::vec4 color = randomColor();
+	glm::vec4 color(0.5,0.5,0.5,0.5);
 
 	int size_p = a*6 + a*3 + a*3 + LENGTH_SUBDIVISIONS * WIDTH_SUBDIVISIONS * 6;
 	m_positions.resize(size_p, glm::vec3(0.0,0.0,0.0));
@@ -34,15 +34,15 @@
 		theta = i*2*PI/a;
 		// Each facet is made of 2 triangles
 		// First triangle
-		x = cos(theta);
-		y = sin(theta);
+		x = 0.5 * cos(theta);
+		y = 0.5 * sin(theta);
 		m_positions[index] = (glm::vec3(x, y, 0.0));
 		m_positions[index+1] = (glm::vec3(x, y, 25.0));
-		x = cos(theta + 2*PI/a);
-		y = sin(theta + 2*PI/a);
+		x = 0.5 * cos(theta + 2*PI/a);
+		y = 0.5 * sin(theta + 2*PI/a);
 		m_positions[index+2] = (glm::vec3(x, y, 0.0));
 		// Second triangle
-		m_positions[index+3] = (glm::vec3(cos(theta), sin(theta), 25.0));
+		m_positions[index+3] = (glm::vec3(0.5 * cos(theta), 0.5 * sin(theta), 25.0));
 		m_positions[index+4] = (glm::vec3(x, y, 25.0));
 		m_positions[index+5] = (glm::vec3(x, y, 0.0));
 		for (int j = 0; j < 6; ++j) {
@@ -52,16 +52,15 @@
 	}
 
 
-	color = randomColor();
 	// Computing the bottom surface
 	for (int i = 0; i < a; ++i) {
 		theta = i*2*PI/a;
-		x = cos(theta);
-		y = sin(theta);
+		x = 0.5 * cos(theta);
+		y = 0.5 * sin(theta);
 		m_positions[index] = (glm::vec3(x, y, 0.0));
 		m_positions[index+1] = (glm::vec3(0.0, 0.0, 0.0));
-		x = cos(theta + 2*PI/a);
-		y = sin(theta + 2*PI/a);
+		x = 0.5 * cos(theta + 2*PI/a);
+		y = 0.5 * sin(theta + 2*PI/a);
 		m_positions[index+2] = (glm::vec3(x, y, 0.0));
 		for (int j = 0; j < 3; ++j) {
 			m_colors.push_back(color);
@@ -70,16 +69,15 @@
 	}
 
 
-	color = randomColor();
 	// Computing the top surface
 	for (int i = 0; i < a; ++i) {
 		theta = i*2*PI/a;
-		x = cos(theta);
-		y = sin(theta);
+		x = 0.5 * cos(theta);
+		y = 0.5 * sin(theta);
 		m_positions[index] = (glm::vec3(x, y, 25.0));
 		m_positions[index+1] = (glm::vec3(0.0, 0.0, 25.0));
-		x = cos(theta + 2*PI/a);
-		y = sin(theta + 2*PI/a);
+		x = 0.5 * cos(theta + 2*PI/a);
+		y = 0.5 * sin(theta + 2*PI/a);
 		m_positions[index+2] = (glm::vec3(x, y, 25.0));
 		for (int j = 0; j < 3; ++j) {
 			m_colors.push_back(color);
@@ -89,12 +87,11 @@
 
 
 	// Computing the flag
-	x = 1.0;
+	x = 0.5;
 	y = 0.0;
 	float z = 0.0;
 	float dl = (float) LENGTH / LENGTH_SUBDIVISIONS;
 	float dw = (float) WIDTH / WIDTH_SUBDIVISIONS;
-	color = randomColor();
 
 	/* m_positions.push_back(glm::vec3(x, y, z));
 	   m_positions.push_back(glm::vec3(x + dl, y, z));
@@ -111,23 +108,40 @@
 
 	start_index = index;
 
+	glm::vec4 blanc(1.0, 1.0, 1.0, 1.0);
+	glm::vec4 noir(0.0,0.0,0.0,1.0);
+	color = noir;
+	int couleur = 0;
+
 	for (int i=0; i < LENGTH_SUBDIVISIONS; ++i) {
 		for (int j=0; j < WIDTH_SUBDIVISIONS; ++j) {
-			m_positions[index] = (glm::vec3(x + i*dl, y + sin(i*dl), z + j*dw ));
-			m_positions[index+1] = (glm::vec3(x + (i+1)*dl, y + sin((i+1)*dl), z + j*dw));
-			m_positions[index+2] = (glm::vec3(x + (i+1)*dl, y + sin((i+1)*dl), z + (j+1)*dw));
+			if (j%2 == couleur) {
+				color = noir;
+			} else {
+				color = blanc;
+			}
+			m_positions[index] = (glm::vec3(x + i*dl,
+					   	y + sin(PI*i*dl/LENGTH) + sin(2*PI*i*dl/LENGTH), z + j*dw ));
+			m_positions[index+1] = (glm::vec3(x + (i+1)*dl,
+					   	y + sin(PI*(i+1)*dl/LENGTH) + sin(2*PI*(i+1)*dl/LENGTH), z + j*dw));
+			m_positions[index+2] = (glm::vec3(x + (i+1)*dl, 
+						y + sin(PI*(i+1)*dl/LENGTH) + sin(2*PI*(i+1)*dl/LENGTH), z + (j+1)*dw));
 			for (int k=0; k < 3; ++k) {
 				m_colors.push_back(color);
 			}
 
-			m_positions[index+3] = (glm::vec3(x + i*dl, y + sin(i*dl), z + j*dw));
-			m_positions[index+4] = (glm::vec3(x + (i+1)*dl, y + sin((i+1)*dl), z + (j+1)*dw));
-			m_positions[index+5] = (glm::vec3(x + i*dl, y + sin(i*dl), z + (j+1)*dw));
+			m_positions[index+3] = (glm::vec3(x + i*dl, 
+						y + sin(PI*i*dl/LENGTH) + sin(2*PI*i*dl/LENGTH), z + j*dw));
+			m_positions[index+4] = (glm::vec3(x + (i+1)*dl, 
+						y + sin(PI*(i+1)*dl/LENGTH) + sin(2*PI*i*dl/LENGTH), z + (j+1)*dw));
+			m_positions[index+5] = (glm::vec3(x + i*dl, 
+						y + sin(PI*i*dl/LENGTH) + sin(2*PI*i*dl/LENGTH), z + (j+1)*dw));
 			for (int k=0; k < 3; ++k) {
 				m_colors.push_back(color);
 			}
 			index += 6;
 		}
+		couleur = 1 - couleur;
 	}
 
 	// Step 2
@@ -203,13 +217,17 @@ void BannerRenderable::do_draw()
 void BannerRenderable::do_animate(float time)
 {
 	// Computing the flag
-	float x = 1.0;
+	float x = 0.5;
 	float y = 0.0;
 	float z = 0.0;
 	float dl = (float) LENGTH / LENGTH_SUBDIVISIONS;
 	float dw = (float) WIDTH / WIDTH_SUBDIVISIONS;
 	glm::vec4 color = randomColor();
 	int index = start_index;
+	float v = sqrt(108/1.83);
+
+	float w = 2*PI*0.5/LENGTH;
+	float k = 2*PI / LENGTH;
 
 	float t = time + PI/LENGTH;
 
@@ -220,13 +238,19 @@ void BannerRenderable::do_animate(float time)
 
 	for (int i=0; i < LENGTH_SUBDIVISIONS; ++i) {
 		for (int j=0; j < WIDTH_SUBDIVISIONS; ++j) {
-			m_positions[index] = (glm::vec3(x + i*dl, y + sin(i*dl*t), z + j*dw ));
-			m_positions[index+1] = (glm::vec3(x + (i+1)*dl, y + sin((i+1)*dl*t), z + j*dw));
-			m_positions[index+2] = (glm::vec3(x + (i+1)*dl, y + sin((i+1)*dl*t), z + (j+1)*dw));
+			m_positions[index] = (glm::vec3(x + i*dl, 
+						y + 0*sin(PI*i*dl/LENGTH)*cos(PI*v*t/LENGTH) + (i*dl)*cos(2*PI*(i*dl-v*t)/LENGTH)/LENGTH, z + j*dw ));
+			m_positions[index+1] = (glm::vec3(x + (i+1)*dl, 
+						y + 0*sin(PI*(i+1)*dl/LENGTH)*cos(PI*v*t/LENGTH) + (i+1)*dl*cos(2*PI*((i+1)*dl-v*t)/LENGTH)/LENGTH, z + j*dw));
+			m_positions[index+2] = (glm::vec3(x + (i+1)*dl, 
+						y + 0*sin(PI*(i+1)*dl/LENGTH)*cos(PI*v*t/LENGTH) + (i+1)*dl*cos(2*PI*((i+1)*dl-v*t)/LENGTH)/LENGTH, z + (j+1)*dw));
 
-			m_positions[index+3] = (glm::vec3(x + i*dl, y + sin(i*dl*t), z + j*dw));
-			m_positions[index+4] = (glm::vec3(x + (i+1)*dl, y + sin((i+1)*dl*t), z + (j+1)*dw));
-			m_positions[index+5] = (glm::vec3(x + i*dl, y + sin(i*dl*t), z + (j+1)*dw));
+			m_positions[index+3] = (glm::vec3(x + i*dl, 
+					y + 0*sin(PI*i*dl/LENGTH)*cos(PI*v*t/LENGTH) + i*dl*cos(2*PI*(i*dl-v*t)/LENGTH)/LENGTH, z + j*dw));
+			m_positions[index+4] = (glm::vec3(x + (i+1)*dl, 
+					y + 0*sin(PI*(i+1)*dl/LENGTH)*cos(PI*v*t/LENGTH) + (i+1)*dl*cos(2*PI*((i+1)*dl-v*t)/LENGTH)/LENGTH, z + (j+1)*dw));
+			m_positions[index+5] = (glm::vec3(x + i*dl, 
+					y + 0*sin(PI*i*dl/LENGTH)*cos(PI*v*t/LENGTH) + i*dl*cos(2*PI*(i*dl-v*t)/LENGTH)/LENGTH, z + (j+1)*dw));
 			index += 6;
 		}
 	}
