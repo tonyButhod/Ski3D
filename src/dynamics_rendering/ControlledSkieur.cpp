@@ -19,7 +19,7 @@ void ControlledSkieurStatus::clear()
     max_angle = 0.9f;
     angularSpeedDown = 4.0;
     angularSpeedUp = 5.5;
-    angularSpeed = glm::vec3(4.0,4.0,2.0);
+    angularSpeed = glm::vec3(4.0,4.0,4.0);
     
     enter = false;
     left = false;
@@ -97,41 +97,35 @@ void ControlledSkieur::do_animate(float time)
                 m_particle->setVelocity(velocity);
             }
         }
-        if (m_status.left && !m_status.right) {
-            glm::vec3 rot = m_particle->getRotation();
-            rot[2] += dt * m_status.angularSpeed[2];
-            m_particle->setRotation(rot);
-        } else if (m_status.right && !m_status.left) {
-            glm::vec3 rot = m_particle->getRotation();
-            rot[2] -= dt * m_status.angularSpeed[2];
-            m_particle->setRotation(rot);
-        }
 
+        glm::vec3 rot = m_particle->getRotation();
         if (!m_particle->getCollision() && !m_particle->getJumpCollision()) {
+            if (m_status.left && !m_status.right) {
+                rot[2] += dt * m_status.angularSpeed[2];
+            } else if (m_status.right && !m_status.left) {
+                rot[2] -= dt * m_status.angularSpeed[2];
+            }
+            
             if (m_status.front && !m_status.back) {
-                glm::vec3 rot = m_particle->getRotation();
-                rot[1] += cos(rot[2]) * dt * m_status.angularSpeed[1];
-                rot[0] += -sin(rot[2]) * dt * m_status.angularSpeed[1];
-                m_particle->setRotation(rot);
+                rot[1] += dt * m_status.angularSpeed[1];
             } else if (m_status.back && !m_status.front) {
-                glm::vec3 rot = m_particle->getRotation();
-                rot[1] -= cos(rot[2]) * dt * m_status.angularSpeed[1];
-                rot[0] -= -sin(rot[2]) * dt * m_status.angularSpeed[1];
-                m_particle->setRotation(rot);
+                rot[1] -= dt * m_status.angularSpeed[1];
             }
 
             if (m_status.lincolnR && !m_status.lincolnL) {
-                glm::vec3 rot = m_particle->getRotation();
-                rot[1] += -sin(rot[2]) * dt * m_status.angularSpeed[0];
-                rot[0] += cos(rot[2]) * dt * m_status.angularSpeed[0];
-                m_particle->setRotation(rot);
+                rot[0] += dt * m_status.angularSpeed[0];
             } else if (m_status.lincolnL && !m_status.lincolnR) {
-                glm::vec3 rot = m_particle->getRotation();
-                rot[1] -= -sin(rot[2]) * dt * m_status.angularSpeed[0];
-                rot[0] -= cos(rot[2]) * dt * m_status.angularSpeed[0];
-                m_particle->setRotation(rot);
+                rot[0] -= dt * m_status.angularSpeed[0];
             }
         }
+        else { //Le skieur peut tourner sur la neige
+            if (m_status.left && !m_status.right) {
+                rot[2] += dt * m_status.angularSpeed[2]/2.0f;
+            } else if (m_status.right && !m_status.left) {
+                rot[2] -= dt * m_status.angularSpeed[2]/2.0f;
+            }
+        }
+        m_particle->setRotation(rot);
     }
     m_status.last_time = time;
 }

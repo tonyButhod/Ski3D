@@ -20,45 +20,43 @@ SkieurRenderable::SkieurRenderable(ShaderProgramPtr shaderProgram,
 
     //Body
     m_body = std::make_shared<BodyRenderable>(shaderProgram);
-    parentTransform = glm::translate(glm::mat4(1.0), glm::vec3(0.0, 0.0, 4.0));
-    m_body->setParentTransform(parentTransform);
     m_body->setMaterial(normalMat);
     HierarchicalRenderable::addChild(parentRenderable, m_body);
     m_body->setParticle(m_particle);
     //Jambe 1
-    m_topLeg1 = std::make_shared<TopLegRenderable>(shaderProgram);
+    m_topLeg1 = std::make_shared<TopLegRenderable>(shaderProgram,false);
     m_topLeg1->setMaterial(normalMat);
-    parentTransform = glm::translate(glm::mat4(1.0), glm::vec3(0.6,0.0,0.0));
+    parentTransform = glm::translate(glm::mat4(1.0), glm::vec3(0.0,0.0,0.0));
     m_topLeg1->setPosRepos(parentTransform);
     HierarchicalRenderable::addChild(m_body, m_topLeg1);
 
-    m_botLeg1 = std::make_shared<BottomLegRenderable>(shaderProgram);
+    m_botLeg1 = std::make_shared<BottomLegRenderable>(shaderProgram,false);
     m_botLeg1->setMaterial(normalMat);
-    parentTransform = glm::translate(glm::mat4(1.0), glm::vec3(0.0,0.0,-2.0));
+    parentTransform = glm::translate(glm::mat4(1.0), glm::vec3(0.4,0.0,-2.0));
     m_botLeg1->setPosRepos(parentTransform);
     HierarchicalRenderable::addChild(m_topLeg1, m_botLeg1);
     //Jambe 2
-    m_topLeg2 = std::make_shared<TopLegRenderable>(shaderProgram);
+    m_topLeg2 = std::make_shared<TopLegRenderable>(shaderProgram, true);
     m_topLeg2->setMaterial(normalMat);
-    parentTransform = glm::translate(glm::mat4(1.0), glm::vec3(-0.6,0.0,0.0));
+    parentTransform = glm::translate(glm::mat4(1.0), glm::vec3(0.0,0.0,-0.0));
     m_topLeg2->setPosRepos(parentTransform);
     HierarchicalRenderable::addChild(m_body, m_topLeg2);
 
-    m_botLeg2 = std::make_shared<BottomLegRenderable>(shaderProgram);
+    m_botLeg2 = std::make_shared<BottomLegRenderable>(shaderProgram, true);
     m_botLeg2->setMaterial(normalMat);
-    parentTransform = glm::translate(glm::mat4(1.0), glm::vec3(0.0,0.0,-2.0));
+    parentTransform = glm::translate(glm::mat4(1.0), glm::vec3(-0.4,0.0,-2.0));
     m_botLeg2->setPosRepos(parentTransform);
     HierarchicalRenderable::addChild(m_topLeg2, m_botLeg2);
 
-    m_ski1 = std::make_shared<SkiRenderable>(shaderProgram);
+    m_ski1 = std::make_shared<SkiRenderable>(shaderProgram, false);
     m_ski1->setMaterial(normalMat);
-    parentTransform = glm::translate(glm::mat4(1.0), glm::vec3(0.0,0.0,-1.8));
+    parentTransform = glm::translate(glm::mat4(1.0), glm::vec3(0.0,0.0,-2.0));
     m_ski1->setPosRepos(parentTransform);
     HierarchicalRenderable::addChild(m_botLeg1, m_ski1);
 
-    m_ski2 = std::make_shared<SkiRenderable>(shaderProgram);
+    m_ski2 = std::make_shared<SkiRenderable>(shaderProgram, true);
     m_ski2->setMaterial(normalMat);
-    parentTransform = glm::translate(glm::mat4(1.0), glm::vec3(0.0,0.0,-1.8));
+    parentTransform = glm::translate(glm::mat4(1.0), glm::vec3(0.0,0.0,-2.0));
     m_ski2->setPosRepos(parentTransform);
     HierarchicalRenderable::addChild(m_botLeg2, m_ski2);
 }
@@ -101,18 +99,8 @@ void SkieurRenderable::initControlledSkieur(ShaderProgramPtr shaderProgram,
 
 void SkieurRenderable::initForcesSkieur(DynamicSystemPtr system, HierarchicalRenderablePtr systemRenderable,
                 ShaderProgramPtr shader, ParticleSkieurPtr particle) {
-    //Initialize a force field that apply only to the mobile particle
-//    glm::vec3 nullForce(0.0, 0.0, 0.0);
     std::vector<ParticlePtr> vParticle;
     vParticle.push_back(particle);
-//    ConstantForceFieldPtr force = std::make_shared<ConstantForceField>(vParticle, nullForce);
-//    system->addForceField(force);
-//
-//    //Initialize a renderable for the force field applied on the mobile particle.
-//    //This renderable allows to modify the attribute of the force by key/mouse events
-//    //Add this renderable to the systemRenderable.
-//    ControlledForceFieldRenderablePtr forceRenderable = std::make_shared<ControlledForceFieldRenderable>(shader, force);
-//    HierarchicalRenderable::addChild(systemRenderable, forceRenderable);
 
     //Add a damping force field to the mobile.
     DampingForceFieldPtr dampingForceField = std::make_shared<DampingForceField>(vParticle, 2.0);
