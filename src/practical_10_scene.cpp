@@ -19,6 +19,7 @@
 #include "../include/dynamics_rendering/QuadRenderable.hpp"
 
 #include "../include/texturing/TexturedPlaneRenderable.hpp"
+#include "../include/texturing/Fence.hpp"
 
 #include "../include/lighting/DirectionalLightRenderable.hpp"
 
@@ -92,19 +93,6 @@ void initialize_practical_10_scene(Viewer& viewer)
     glm::vec3 p1;
     glm::vec3 p2;
     glm::vec3 p3;
-    
-    //Initialize two plane for collision on left and right of the slope
-    p1 = glm::vec3(0.0, 50.0, 0.0);
-    p2 = glm::vec3(10.0, 50.0, 0.0);
-    p3 = glm::vec3(0.0, 50.0, 10.0);
-    PlanePtr planeLeft = std::make_shared<Plane>(p1, p2, p3);
-    system->addPlaneObstacle(planeLeft);
-    p1[1] = -50.0;
-    p2[1] = -50.0;
-    p3[1] = -50.0;
-    PlanePtr planeRight = std::make_shared<Plane>(p1, p3, p2);
-    system->addPlaneObstacle(planeRight);
-    
     //Initialize a plane at the bottom of the scene
     p1 = glm::vec3(400.0, 50.0, 0.0);
     p2 = glm::vec3(400.0, -50.0, 0.0);
@@ -120,8 +108,25 @@ void initialize_practical_10_scene(Viewer& viewer)
     PlanePtr plane = std::make_shared<Plane>(p1, p2, p3);
     plane->setGround(true);
     system->addPlaneObstacle(plane);
-
     map->generateTremplin(plane, systemRenderable, texShader);
+    
+    //Initialize three planes for collision on left and right of the slope and at the end
+    p1 = glm::vec3(0.0, 50.0, 0.0);
+    p2 = glm::vec3(10.0, 50.0, 0.0);
+    p3 = glm::vec3(0.0, 50.0, 10.0);
+    PlanePtr planeLeft = std::make_shared<Plane>(p1, p2, p3);
+    system->addPlaneObstacle(planeLeft);
+    p1[1] = -50.0;
+    p2[1] = -50.0;
+    p3[1] = -50.0;
+    PlanePtr planeRight = std::make_shared<Plane>(p1, p3, p2);
+    system->addPlaneObstacle(planeRight);
+    p1 = glm::vec3(450.0, 50.0, 0.0);
+    p2 = glm::vec3(450.0, -50.0, 0.0);
+    p3 = glm::vec3(450.0, 50.0, 10.0);
+    PlanePtr planeEnd = std::make_shared<Plane>(p1, p2, p3);
+    system->addPlaneObstacle(planeEnd);
+    
 
     /*
     TexturedPlaneRenderablePtr texPlane = std::make_shared<TexturedPlaneRenderable>(texShader, filename);
@@ -147,15 +152,41 @@ void initialize_practical_10_scene(Viewer& viewer)
     skieur->initForcesSkieur(system, systemRenderable, flatShader, mobile);
     viewer.getCamera().setParticle(mobile);
 
-	//Drapeau 1
-	std::shared_ptr<BannerRenderable> banner1 = std::make_shared<BannerRenderable>(flatShader);
-	banner1->setModelMatrix(glm::translate(glm::mat4(1.0), glm::vec3(400.0, 40.0, 0)));
-	viewer.addRenderable(banner1); 
+    //Drapeau 1
+    std::shared_ptr<BannerRenderable> banner1 = std::make_shared<BannerRenderable>(flatShader);
+    banner1->setModelMatrix(glm::translate(glm::mat4(1.0), glm::vec3(392.0, 48.0, 0)));
+    viewer.addRenderable(banner1); 
 
-	//Drapeau
-	std::shared_ptr<BannerRenderable> banner2 = std::make_shared<BannerRenderable>(flatShader);
-	banner2->setModelMatrix(glm::translate(glm::mat4(1.0), glm::vec3(400.0, -45.0, 0)));
-	viewer.addRenderable(banner2); 
+    //Drapeau
+    std::shared_ptr<BannerRenderable> banner2 = std::make_shared<BannerRenderable>(flatShader);
+    banner2->setModelMatrix(glm::translate(glm::mat4(1.0), glm::vec3(392.0, -48.0, 0)));
+    viewer.addRenderable(banner2); 
+        
+    /********** Fences ***********/
+    glm::mat4 translate = glm::translate(glm::mat4(1.0), glm::vec3(-380.0,48.0,387.0));
+    glm::mat4 transfo(1.0);
+    //Fences on the left and right
+    transfo = glm::scale(transfo, glm::vec3(3.0,3.0,3.0));
+    transfo = glm::rotate(transfo, 0.463f, glm::vec3(0.0,1.0,0.0));
+    transfo = glm::rotate(transfo, 1.57079632679f, glm::vec3(0.0,1.0,0.0));
+    transfo = glm::rotate(transfo, 1.57079632679f, glm::vec3(0.0,0.0,1.0));
+    addFences(systemRenderable, texShader, 58, translate*transfo);
+    translate = glm::translate(glm::mat4(1.0), glm::vec3(-380.0,-48.0,387.0));
+    addFences(systemRenderable, texShader, 58, translate*transfo);
+    //Fences at the bottom
+    transfo = glm::scale(glm::mat4(1.0), glm::vec3(3.0,3.0,3.0));
+    transfo = glm::rotate(transfo, 1.57079632679f, glm::vec3(0.0,1.0,0.0));
+    transfo = glm::rotate(transfo, 1.57079632679f, glm::vec3(0.0,0.0,1.0));
+    translate = glm::translate(glm::mat4(1.0), glm::vec3(401.0,48.0,-2.0));
+    addFences(systemRenderable, texShader, 4, translate*transfo);
+    translate = glm::translate(glm::mat4(1.0), glm::vec3(401.0,-48.0,-2.0));
+    addFences(systemRenderable, texShader, 4, translate*transfo);
+    //Fences at the end
+    transfo = glm::scale(glm::mat4(1.0), glm::vec3(3.0,3.2,3.0));
+    transfo = glm::rotate(transfo, 1.57079632679f, glm::vec3(1.0,0.0,0.0));
+    translate = glm::translate(glm::mat4(1.0), glm::vec3(450.0,36.0,-2.0));
+    addFences(systemRenderable, texShader, 6, translate*transfo);
+    
 
 	viewer.setAnimationLoop(false, 2*3.14159265);
     viewer.startAnimation();

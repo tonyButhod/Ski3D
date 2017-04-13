@@ -57,7 +57,7 @@ bool testParticlePlane(const ParticlePtr &particle, const PlanePtr &plane)
     //Plane::normal(): Return the normal of the plane
     //Particle::getRadius(), Particle::getPosition()
     if (std::abs(glm::dot(particle->getPosition(), plane->normal())-plane->distanceToOrigin()) <= particle->getRadius()) {
-        particle->setCollision(true);
+        //particle->setCollision(true);
         return true;
     }
 
