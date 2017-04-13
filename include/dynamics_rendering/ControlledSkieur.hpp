@@ -4,6 +4,9 @@
 #include "../HierarchicalRenderable.hpp"
 #include "../dynamics/ConstantForceField.hpp"
 #include "../dynamics/ParticleSkieur.hpp"
+#include <glm/gtc/type_ptr.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <GL/glew.h>
 
 /**@brief Status of a ControlledSkieurStatus.
  *
@@ -26,8 +29,9 @@ public:
     float max_angle;
     float angularSpeedDown;
     float angularSpeedUp;
+    glm::vec3 angularSpeed;
 
-    bool enter;
+    bool enter, left, right, front, back, lincolnR, lincolnL;
 };
 
 

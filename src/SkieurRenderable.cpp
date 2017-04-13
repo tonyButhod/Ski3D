@@ -102,17 +102,17 @@ void SkieurRenderable::initControlledSkieur(ShaderProgramPtr shaderProgram,
 void SkieurRenderable::initForcesSkieur(DynamicSystemPtr system, HierarchicalRenderablePtr systemRenderable,
                 ShaderProgramPtr shader, ParticleSkieurPtr particle) {
     //Initialize a force field that apply only to the mobile particle
-    glm::vec3 nullForce(0.0, 0.0, 0.0);
+//    glm::vec3 nullForce(0.0, 0.0, 0.0);
     std::vector<ParticlePtr> vParticle;
     vParticle.push_back(particle);
-    ConstantForceFieldPtr force = std::make_shared<ConstantForceField>(vParticle, nullForce);
-    system->addForceField(force);
-
-    //Initialize a renderable for the force field applied on the mobile particle.
-    //This renderable allows to modify the attribute of the force by key/mouse events
-    //Add this renderable to the systemRenderable.
-    ControlledForceFieldRenderablePtr forceRenderable = std::make_shared<ControlledForceFieldRenderable>(shader, force);
-    HierarchicalRenderable::addChild(systemRenderable, forceRenderable);
+//    ConstantForceFieldPtr force = std::make_shared<ConstantForceField>(vParticle, nullForce);
+//    system->addForceField(force);
+//
+//    //Initialize a renderable for the force field applied on the mobile particle.
+//    //This renderable allows to modify the attribute of the force by key/mouse events
+//    //Add this renderable to the systemRenderable.
+//    ControlledForceFieldRenderablePtr forceRenderable = std::make_shared<ControlledForceFieldRenderable>(shader, force);
+//    HierarchicalRenderable::addChild(systemRenderable, forceRenderable);
 
     //Add a damping force field to the mobile.
     DampingForceFieldPtr dampingForceField = std::make_shared<DampingForceField>(vParticle, 2.0);
