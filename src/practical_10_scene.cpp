@@ -122,12 +122,17 @@ void initialize_practical_10_scene(Viewer& viewer)
     skieur->initForcesSkieur(system, systemRenderable, flatShader, mobile);
     viewer.getCamera().setParticle(mobile);
 
-	//Drapeau
-	/* std::shared_ptr<BannerRenderable> banner = std::make_shared<BannerRenderable>(flatShader);
-	banner->setModelMatrix(glm::translate(glm::mat4(1.0), glm::vec3(0.0, 0.0, 200)));
-	viewer.addRenderable(banner); */
+	//Drapeau 1
+	std::shared_ptr<BannerRenderable> banner1 = std::make_shared<BannerRenderable>(flatShader);
+	banner1->setModelMatrix(glm::translate(glm::mat4(1.0), glm::vec3(400.0, 40.0, 0)));
+	viewer.addRenderable(banner1); 
 
-	viewer.setAnimationLoop(true, 2*3.14159265);
+	//Drapeau
+	std::shared_ptr<BannerRenderable> banner2 = std::make_shared<BannerRenderable>(flatShader);
+	banner2->setModelMatrix(glm::translate(glm::mat4(1.0), glm::vec3(400.0, -45.0, 0)));
+	viewer.addRenderable(banner2); 
+
+	viewer.setAnimationLoop(false, 2*3.14159265);
     viewer.startAnimation();
 
 

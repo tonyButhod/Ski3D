@@ -7,8 +7,8 @@
 
 #define PI 3.14159265
 
-#define LENGTH 8
-#define WIDTH 6
+#define LENGTH 10
+#define WIDTH 8
 
 #define LENGTH_SUBDIVISIONS 10
 #define WIDTH_SUBDIVISIONS 10
