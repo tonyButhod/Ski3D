@@ -38,7 +38,7 @@ void SkieurCollision::do_solveCollision()
         float dist = std::abs(glm::dot(m_particle->getPosition(), normal)-m_plane->distanceToOrigin());
         m_particle->setPosition(m_particle->getPosition() + (m_particle->getRadius() - dist)*normal);
     }
-    //On met à jour al vitesse
+    //On met à jour la vitesse
     float proj_v = glm::dot(normal, m_particle->getVelocity());
     m_particle->setVelocity(m_particle->getVelocity() - proj_v*normal);
     
@@ -56,6 +56,7 @@ void SkieurCollision::do_solveCollision()
     if (abs(rotation[0]) + abs(rotation[1]) > 3.14159265359f) {
         rotation[0] = ((rotation[0]<0)?-1.0f:1.0f)*3.14159265359f - rotation[0];
         rotation[1] = ((rotation[1]<0)?-1.0f:1.0f)*3.14159265359f - rotation[1];
+        rotation[2] -= 3.14159265359f;
     }
     //Pour que le skieur glisse dans la bonne direction
     glm::vec3 ortho_ski = glm::normalize(glm::vec3(-sin(rotation[2]), cos(rotation[2]), 0.0));
@@ -80,9 +81,6 @@ void SkieurCollision::do_solveCollision()
 
 bool testParticleSkieurPlane(const ParticleSkieurPtr &particle, const PlanePtr &plane)
 {
-    particle->setCollision(false);
-    particle->setJumpCollision(false);
-    particle->setJump(NULL);
     //On teste les collisions avec les sauts
     for (JumpRenderablePtr j : plane->getJumps()) {
         const glm::vec3 &pMin = j->getCornerMin();

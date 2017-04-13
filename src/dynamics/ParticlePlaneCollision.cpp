@@ -60,7 +60,6 @@ bool testParticlePlane(const ParticlePtr &particle, const PlanePtr &plane)
         particle->setCollision(true);
         return true;
     }
-    particle->setCollision(false);
 
     return false;
 }

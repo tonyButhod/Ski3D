@@ -108,6 +108,7 @@ void DynamicSystem::detectCollisions()
 {
     //Detect particle plane collisions
     for (ParticlePtr p : m_particles) {
+        p->setCollision(false);
         for (PlanePtr o : m_planeObstacles) {
             if (testParticlePlane(p, o)) {
                 ParticlePlaneCollisionPtr c =
@@ -119,10 +120,20 @@ void DynamicSystem::detectCollisions()
     
     //Detect skieur plane collisions
     for (ParticleSkieurPtr p : m_skieurs) {
+        p->setCollision(false);
+        p->setJumpCollision(false);
+        p->setJump(NULL);
         for (PlanePtr o : m_planeObstacles) {
-            if (testParticleSkieurPlane(p, o)) {
-                SkieurCollisionPtr c =
-                    std::make_shared<SkieurCollision>(p,o,m_restitution);
+            if (o->isGround()) {
+                if (testParticleSkieurPlane(p, o)) {
+                    SkieurCollisionPtr c =
+                        std::make_shared<SkieurCollision>(p,o,m_restitution);
+                    m_collisions.push_back(c);
+                }
+            }
+            else if (testParticlePlane(p, o)) {
+                ParticlePlaneCollisionPtr c =
+                    std::make_shared<ParticlePlaneCollision>(p,o,m_restitution);
                 m_collisions.push_back(c);
             }
         }

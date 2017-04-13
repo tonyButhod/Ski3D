@@ -74,6 +74,8 @@ public:
     
     void addJump(HierarchicalRenderablePtr parent, ShaderProgramPtr shader, double x, double y, double wx, double wy, double wz);
     const std::vector<JumpRenderablePtr> & getJumps();
+    bool isGround();
+    bool setGround(bool b);
 
 private:
     glm::vec3 m_n; /*!< Plane normal. Points x on the plane satisfy dot(m_n,x)=m_d */
@@ -81,6 +83,7 @@ private:
     std::vector<JumpRenderablePtr> m_jumps;
     float m_anglex, m_anglez;
     glm::vec3 m_origin;
+    bool m_isGround;
 };
 
 typedef std::shared_ptr<Plane> PlanePtr;

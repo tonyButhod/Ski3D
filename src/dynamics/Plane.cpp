@@ -6,6 +6,7 @@
 Plane::Plane(const glm::vec3& normal, const glm::vec3& point)
     : m_n{normal}, m_d{dot(normal, point)}, m_jumps(0)
 {
+    m_isGround = false;
 }
 
 Plane::Plane(const glm::vec3& a, const glm::vec3& b, const glm::vec3& c) 
@@ -22,6 +23,7 @@ Plane::Plane(const glm::vec3& a, const glm::vec3& b, const glm::vec3& c)
         m_anglex = 0.0f;
     }
     m_anglez = acos(glm::dot(m_n,glm::vec3(0,0,1)));
+    m_isGround = false;
 }
 
 Plane::~Plane()
@@ -83,4 +85,12 @@ void Plane::addJump(HierarchicalRenderablePtr parent, ShaderProgramPtr shader, d
 
 const std::vector<JumpRenderablePtr> & Plane::getJumps() {
     return m_jumps;
+}
+
+bool Plane::isGround() {
+    return m_isGround;
+}
+
+bool Plane::setGround(bool b) {
+    m_isGround = b;
 }

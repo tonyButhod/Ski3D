@@ -88,12 +88,37 @@ void initialize_practical_10_scene(Viewer& viewer)
     map->setMaterial(normal);
     viewer.addRenderable(map);
     map->generateSapin(viewer, texShader);
-
+    
+    glm::vec3 p1;
+    glm::vec3 p2;
+    glm::vec3 p3;
+    
+    //Initialize two plane for collision on left and right of the slope
+    p1 = glm::vec3(0.0, 50.0, 0.0);
+    p2 = glm::vec3(10.0, 50.0, 0.0);
+    p3 = glm::vec3(0.0, 50.0, 10.0);
+    PlanePtr planeLeft = std::make_shared<Plane>(p1, p2, p3);
+    system->addPlaneObstacle(planeLeft);
+    p1[1] = -50.0;
+    p2[1] = -50.0;
+    p3[1] = -50.0;
+    PlanePtr planeRight = std::make_shared<Plane>(p1, p3, p2);
+    system->addPlaneObstacle(planeRight);
+    
+    //Initialize a plane at the bottom of the scene
+    p1 = glm::vec3(400.0, 50.0, 0.0);
+    p2 = glm::vec3(400.0, -50.0, 0.0);
+    p3 = glm::vec3(450.0, 50.0, 0.0);
+    PlanePtr planeBottom = std::make_shared<Plane>(p1, p2, p3);
+    planeBottom->setGround(true);
+    system->addPlaneObstacle(planeBottom);
+    
     //Initialize a plane from 3 points and add it to the system as an obstacle
-    glm::vec3 p1(-400.0, 50.0, 400.0);
-    glm::vec3 p2(-400.0, -50.0, 400.0);
-    glm::vec3 p3(400.0, -50.0, 0.0);
+    p1 = glm::vec3(-400.0, 50.0, 400.0);
+    p2 = glm::vec3(-400.0, -50.0, 400.0);
+    p3 = glm::vec3(400.0, -50.0, 0.0);
     PlanePtr plane = std::make_shared<Plane>(p1, p2, p3);
+    plane->setGround(true);
     system->addPlaneObstacle(plane);
 
     map->generateTremplin(plane, systemRenderable, texShader);
@@ -109,7 +134,7 @@ void initialize_practical_10_scene(Viewer& viewer)
     */
 
     //Création de la particule associée au skieur
-    glm::vec3 px(-380.0, 0.0, 400.0);
+    glm::vec3 px(-380.0, 0.0,400.0);
     glm::vec3 pv(0.0, 0.0, 0.0);
     float pm = 85.0, pr = 4.0;
     ParticleSkieurPtr mobile = std::make_shared<ParticleSkieur>( px, pv, pm, pr);
