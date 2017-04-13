@@ -31,7 +31,7 @@ BodyRenderable::BodyRenderable(ShaderProgramPtr shaderProgram)
         m_origTexCoords.push_back(tmp_tex[i]);
         m_texCoords.push_back(tmp_tex[i]);
     }
-    
+
     // === PART 1: Vertex attributes, except texture coordinates
     //Create buffers
     glGenBuffers(1, &m_pBuffer); //vertices
@@ -101,7 +101,7 @@ void BodyRenderable::do_draw()
     rotate = glm::rotate(rotate, rotation[2], glm::vec3(0,0,1));
     glm::mat4 translate = glm::translate(glm::mat4(1.0), newPos);
     setParentTransform(translate*rotate*scale);
-    
+
     //Locations
     int modelLocation = m_shaderProgram->getUniformLocation("modelMat");
     int nitLocation = m_shaderProgram->getUniformLocation("NIT");

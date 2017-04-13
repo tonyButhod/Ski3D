@@ -22,8 +22,11 @@
 
 #define MIN_X   -400
 #define MIN_Y   -400
-#define MAX_X   400
+#define MAX_X   600
 #define MAX_Y   400
+
+#define LIMIT_X 400
+
 
 #define MMIN_X   -50
 #define MMIN_Y   -400
@@ -36,19 +39,22 @@
 #define STEP_X  4
 #define STEP_Y  20
 
-#define SEED        56
+#define SEED        1651
 #define MAX_HEIGHT  100
 #define FREQUENCE   100
 
-#define RARETE_SAPIN  1000
-#define MAX_SAPIN     100
+
+#define SEED_SAPIN    50
 #define RARETE_TREMPLIN  80
 #define MAX_TREMPLIN  8
 
 
 int getOffset(int y)
 {
-    return (int)(200+(float)-0.5*(float)y);
+    if(y > LIMIT_X)
+        return 0;
+    else
+        return (int)(200+(float)-0.5*(float)y);
 }
 
 
@@ -58,7 +64,7 @@ int getNoise(int y, int x)
 
     //ValueCoherentNoise3D
 
-    if(x>=MMIN_X && x<=MMAX_X && y>=MMIN_Y && y<=MMAX_Y)
+    if(x>=MMIN_X && x<=MMAX_X)
         height = getOffset(y);
     else if(x>=NMIN_X && x<=MMIN_X)
         height = getOffset(y) + noise::ValueCoherentNoise3D(((float)x)/FREQUENCE, ((float)y)/FREQUENCE, SEED) * MAX_HEIGHT * sqrt((float)abs(x-MMIN_X)/((float)abs(NMIN_X-MMIN_X)));
@@ -319,51 +325,33 @@ void MapRenderable::generateSapin(Viewer& viewer, ShaderProgramPtr texShader)
     int i, j;
 
     int nbSapin = 0;
-
     srand(time(NULL));
 
     std::string filename = "../textures/sapin_snow.png";
     MaterialPtr normalMat = Material::Normal();
     glm::mat4 localTransformation;
 
-    for(j=NMIN_X; j<MMIN_X; j += STEP_X)
+    j = STEP_X;
+
+    for(i=MIN_Y; i<LIMIT_X; i += STEP_X*20)
     {
-        for(i=MIN_Y; i<MAX_Y; i += STEP_X)
-        {
-            int r = rand() % RARETE_SAPIN;
+          j = ((j*j+i+SEED_SAPIN)%(MMIN_X-NMIN_X))+NMIN_X;
+          TexturedSapinRenderablePtr texSapin = std::make_shared<TexturedSapinRenderable>(texShader, filename);
+          texSapin->setMaterial(normalMat);
+          localTransformation = glm::translate(glm::mat4(1.0), glm::vec3(i,j,getNoise(i, j)));
+          localTransformation = glm::scale(localTransformation, glm::vec3(3.0,3.0,3.0));
+          texSapin->setLocalTransform(localTransformation);
+          viewer.addRenderable(texSapin);
+          nbSapin++;
 
-            if(r == 0 && nbSapin < MAX_SAPIN)
-            {
-                // On genere le sapin dans la zone
-                TexturedSapinRenderablePtr texSapin = std::make_shared<TexturedSapinRenderable>(texShader, filename);
-                texSapin->setMaterial(normalMat);
-                localTransformation = glm::translate(glm::mat4(1.0), glm::vec3(i,j,getNoise(i, j)));
-                localTransformation = glm::scale(localTransformation, glm::vec3(3.0,3.0,3.0));
-                texSapin->setLocalTransform(localTransformation);
-                viewer.addRenderable(texSapin);
-                nbSapin++;
-            }
-        }
-    }
-
-    for(j=MMAX_X; j<NMAX_X; j += STEP_X)
-    {
-        for(i=MIN_Y; i<MAX_Y; i += STEP_X)
-        {
-            int r = rand() % RARETE_SAPIN;
-
-            if(r == 0 && nbSapin < MAX_SAPIN)
-            {
-                // On genere le sapin dans la zone
-                TexturedSapinRenderablePtr texSapin = std::make_shared<TexturedSapinRenderable>(texShader, filename);
-                texSapin->setMaterial(normalMat);
-                localTransformation = glm::translate(glm::mat4(1.0), glm::vec3(i,j,getNoise(i, j)));
-                localTransformation = glm::scale(localTransformation, glm::vec3(3.0,3.0,3.0));
-                texSapin->setLocalTransform(localTransformation);
-                viewer.addRenderable(texSapin);
-                nbSapin++;
-            }
-        }
+          j = ((j*j+i+SEED_SAPIN)%(NMAX_X-MMAX_X))+MMAX_X;
+          texSapin = std::make_shared<TexturedSapinRenderable>(texShader, filename);
+          texSapin->setMaterial(normalMat);
+          localTransformation = glm::translate(glm::mat4(1.0), glm::vec3(i,j,getNoise(i, j)));
+          localTransformation = glm::scale(localTransformation, glm::vec3(3.0,3.0,3.0));
+          texSapin->setLocalTransform(localTransformation);
+          viewer.addRenderable(texSapin);
+          nbSapin++;
     }
 }
 
@@ -383,7 +371,7 @@ void MapRenderable::generateTremplin(PlanePtr plane, DynamicSystemRenderablePtr 
 
     //for(j=MMIN_X+STEP_X*2; j<=MMAX_X-STEP_X*2; j += STEP_X)
     //{
-        for(i=0; i<MAX_TREMPLIN; i++)
+        for(i=1; i<MAX_TREMPLIN; i++)
         {
             int r = (rand()%(80)) +10;
 
