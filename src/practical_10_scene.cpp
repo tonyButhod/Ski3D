@@ -21,7 +21,7 @@
 #include "../include/lighting/DirectionalLightRenderable.hpp"
 
 #include "../include/MapRenderable.hpp"
-
+#include "../include/BannerRenderable.hpp"
 
 
 void initialize_practical_10_scene(Viewer& viewer)
@@ -111,7 +111,12 @@ void initialize_practical_10_scene(Viewer& viewer)
     skieur->initForcesSkieur(system, systemRenderable, flatShader, mobile);
     viewer.getCamera().setParticle(mobile);
 
+	//Drapeau
+	/* std::shared_ptr<BannerRenderable> banner = std::make_shared<BannerRenderable>(flatShader);
+	banner->setModelMatrix(glm::translate(glm::mat4(1.0), glm::vec3(0.0, 0.0, 200)));
+	viewer.addRenderable(banner); */
 
+	viewer.setAnimationLoop(true, 2*3.14159265);
     viewer.startAnimation();
 
 
