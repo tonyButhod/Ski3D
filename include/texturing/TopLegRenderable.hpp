@@ -18,7 +18,7 @@ class TopLegRenderable : public HierarchicalRenderable
 {
 public :
     ~TopLegRenderable();
-    TopLegRenderable(ShaderProgramPtr shaderProgram);
+    TopLegRenderable(ShaderProgramPtr shaderProgram, bool left = true);
     void setMaterial(const MaterialPtr& material);
     void setControlledSkieur(ControlledSkieurPtr controlledSkieur);
     void setPosRepos(glm::mat4 pos);
@@ -33,11 +33,13 @@ private:
     
     std::vector< glm::vec3 > m_positions;
     std::vector< glm::vec3 > m_normals;
+    std::vector<unsigned int> m_indices;
     std::vector< glm::vec2 > m_texCoords;
     std::vector< glm::vec2 > m_origTexCoords;
 
     unsigned int m_pBuffer;
     unsigned int m_nBuffer;
+    unsigned int m_iBuffer;
     unsigned int m_tBuffer;
     unsigned int m_texId;
 

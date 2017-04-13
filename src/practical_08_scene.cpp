@@ -141,7 +141,7 @@ void initialize_practical_08_scene(Viewer& viewer)
     float pm = 85.0, pr = 4.0;
     ParticleSkieurPtr mobile = std::make_shared<ParticleSkieur>( px, pv, pm, pr);
     system->addSkieur( mobile );
-    viewer.getCamera().setParticle(mobile);
+    //viewer.getCamera().setParticle(mobile);
     
     //Skieur
     SkieurRenderablePtr skieur = std::make_shared<SkieurRenderable>(texShader, systemRenderable, mobile);

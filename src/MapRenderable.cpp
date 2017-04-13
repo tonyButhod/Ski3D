@@ -373,27 +373,16 @@ void MapRenderable::generateTremplin(PlanePtr plane, DynamicSystemRenderablePtr 
 {
     int i, j;
 
-    int nbTremplin = 0;
-
     srand(time(NULL));
 
     std::string filename = "../textures/sapin_snow.png";
     MaterialPtr normalMat = Material::Normal();
     glm::mat4 localTransformation;
 
-    //for(j=MMIN_X+STEP_X*2; j<=MMAX_X-STEP_X*2; j += STEP_X)
-    //{
-        for(i=0; i<MAX_TREMPLIN; i++)
-        {
-            int r = (rand()%(80)) +10;
-
-            //if(r == 0 && nbTremplin < MAX_TREMPLIN)
-            {
-                // On genere le sapin dans la zone
-                //plane->addJump(systemRenderable, texShader, i, j, 10, 10, 8);
-                plane->addJump(systemRenderable, texShader, i*100, -r, 10, 10, 8);
-                nbTremplin++;
-            }
-        }
-    //}
+    for(i=1; i<MAX_TREMPLIN; i++)
+    {
+        int r = (rand()%80) +10;
+        // On genere le sapin dans la zone
+        plane->addJump(systemRenderable, texShader, i*100, -r, 10, 10, 8);
+    }
 }

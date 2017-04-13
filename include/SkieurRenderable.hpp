@@ -20,8 +20,13 @@
 #include "../include/texturing/TopLegRenderable.hpp"
 #include "../include/texturing/SkiRenderable.hpp"
 #include "../include/texturing/JumpRenderable.hpp"
+#include "../include/texturing/TexturedCubeRenderable.hpp"
 #include <vector>
 #include <glm/glm.hpp>
+
+class SkieurRenderable;
+
+typedef std::shared_ptr<SkieurRenderable> SkieurRenderablePtr;
 
 class SkieurRenderable : public HierarchicalRenderable
 {
@@ -48,8 +53,6 @@ private:
     SkiRenderablePtr m_ski1, m_ski2;
     
 };
-
-typedef std::shared_ptr<SkieurRenderable> SkieurRenderablePtr;
 
 #endif	/* SKIEURRENDERABLE_HPP */
 
