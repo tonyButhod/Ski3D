@@ -55,12 +55,12 @@ ControlledForceFieldRenderable::ControlledForceFieldRenderable(ShaderProgramPtr 
     m_normals.clear();
 
     for (ParticlePtr p : particles) {
-        m_positions.push_back(p->getPosition());
-        m_positions.push_back(p->getPosition() + m_status.movement);
-        m_colors.push_back(glm::vec4(1.0,0.0,0.0,1.0));
-        m_colors.push_back(glm::vec4(1.0,0.0,0.0,1.0));
-        m_normals.push_back(glm::vec3(1.0,0.0,0.0));
-        m_normals.push_back(glm::vec3(1.0,0.0,0.0));
+//        m_positions.push_back(p->getPosition());
+//        m_positions.push_back(p->getPosition() + m_status.movement);
+//        m_colors.push_back(glm::vec4(1.0,0.0,0.0,1.0));
+//        m_colors.push_back(glm::vec4(1.0,0.0,0.0,1.0));
+//        m_normals.push_back(glm::vec3(1.0,0.0,0.0));
+//        m_normals.push_back(glm::vec3(1.0,0.0,0.0));
     }
 
     //Create buffers

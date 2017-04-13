@@ -29,7 +29,7 @@ JumpRenderable::JumpRenderable(
         m_origTexCoords.push_back(tmp_tex[i]);
         m_texCoords.push_back(tmp_tex[i]);
     }
-    
+
     // === PART 1: Vertex attributes, except texture coordinates
     //Create buffers
     glGenBuffers(1, &m_pBuffer); //vertices
@@ -50,7 +50,7 @@ JumpRenderable::JumpRenderable(
     // now handle the "texture image" itself
     // load the image (here using the sfml library)
     sf::Image image;
-    image.loadFromFile("../textures/grass_texture.png");
+    image.loadFromFile("../textures/snow.jpg");
     // sfml inverts the v axis...
     // Hence, flip it to put the image in OpenGL convention: lower left corner is (0,0)
     image.flipVertically();
@@ -84,7 +84,7 @@ JumpRenderable::~JumpRenderable()
 }
 
 void JumpRenderable::do_draw()
-{    
+{
     //Locations
     int modelLocation = m_shaderProgram->getUniformLocation("modelMat");
     int nitLocation = m_shaderProgram->getUniformLocation("NIT");
@@ -164,7 +164,7 @@ void JumpRenderable::setMaterial(const MaterialPtr& material)
 }
 
 
-void constructJump(std::vector<glm::vec3> &pos, std::vector<glm::vec3> &norm, 
+void constructJump(std::vector<glm::vec3> &pos, std::vector<glm::vec3> &norm,
         std::vector<glm::vec2> &tex) {
     /********* Positions *********/
     //Dessus du saut
@@ -185,11 +185,11 @@ void constructJump(std::vector<glm::vec3> &pos, std::vector<glm::vec3> &norm,
     pos.push_back(glm::vec3(-1,-1,0));
     pos.push_back(glm::vec3(-1,1,0));
     pos.push_back(glm::vec3(-1,1,1));
-    
+
     pos.push_back(glm::vec3(1,-1,0));
     pos.push_back(glm::vec3(1,1,0));
     pos.push_back(glm::vec3(1,1,1));
-    
+
     /******** Normales *********/
     //Dessus du saut
     norm.push_back(glm::vec3(0,-1,1));
@@ -209,11 +209,11 @@ void constructJump(std::vector<glm::vec3> &pos, std::vector<glm::vec3> &norm,
     norm.push_back(glm::vec3(-1,0,0));
     norm.push_back(glm::vec3(-1,0,0));
     norm.push_back(glm::vec3(-1,0,0));
-    
+
     norm.push_back(glm::vec3(1,0,0));
     norm.push_back(glm::vec3(1,0,0));
     norm.push_back(glm::vec3(1,0,0));
-    
+
     /******** Texture *********/
     //Dessus du saut
     tex.push_back(glm::vec2(0,0));
@@ -233,7 +233,7 @@ void constructJump(std::vector<glm::vec3> &pos, std::vector<glm::vec3> &norm,
     tex.push_back(glm::vec2(0,0));
     tex.push_back(glm::vec2(1,0));
     tex.push_back(glm::vec2(1,1));
-    
+
     tex.push_back(glm::vec2(0,0));
     tex.push_back(glm::vec2(1,0));
     tex.push_back(glm::vec2(1,1));

@@ -136,10 +136,9 @@ void initialize_practical_08_scene(Viewer& viewer)
     /********** Initialisation du skieur ************/
     
     //Création de la particule associée au skieur
-    glm::vec3 px(0.0, 0.0, 0.0);
+    glm::vec3 px(-20.0, 0.0, 0.0);
     glm::vec3 pv(0.0, 0.0, 0.0);
     float pm = 85.0, pr = 4.0;
-    px = glm::vec3(0.0,4.0,0.0);
     ParticleSkieurPtr mobile = std::make_shared<ParticleSkieur>( px, pv, pm, pr);
     system->addSkieur( mobile );
     viewer.getCamera().setParticle(mobile);
