@@ -18,6 +18,8 @@
 #include "../include/dynamics_rendering/ControlledForceFieldRenderable.hpp"
 #include "../include/dynamics_rendering/QuadRenderable.hpp"
 
+#include "../include/texturing/TexturedPlaneRenderable.hpp"
+
 #include "../include/lighting/DirectionalLightRenderable.hpp"
 
 #include "../include/MapRenderable.hpp"
@@ -54,7 +56,7 @@ void initialize_practical_10_scene(Viewer& viewer)
 
 
     glm::mat4 localTransformation(1.0);
-    MaterialPtr pearl = Material::Normal();
+    MaterialPtr normal = Material::Normal();
 
     ShaderProgramPtr texShader = std::make_shared<ShaderProgram>("../shaders/textureVertex.glsl", "../shaders/textureFragment.glsl");
     viewer.addShaderProgram(texShader);
@@ -83,7 +85,7 @@ void initialize_practical_10_scene(Viewer& viewer)
     std::shared_ptr<MapRenderable> map
         = std::make_shared<MapRenderable>(texShader, filename);
     map->setModelMatrix(glm::translate(glm::mat4(), glm::vec3(0.0, 0.0, 0.0)));
-    map->setMaterial(pearl);
+    map->setMaterial(normal);
     viewer.addRenderable(map);
     map->generateSapin(viewer, texShader);
 
@@ -91,11 +93,20 @@ void initialize_practical_10_scene(Viewer& viewer)
     glm::vec3 p1(-400.0, 50.0, 400.0);
     glm::vec3 p2(-400.0, -50.0, 400.0);
     glm::vec3 p3(400.0, -50.0, 0.0);
-    //glm::vec3 p4(50.0, 400.0, 400.0);
     PlanePtr plane = std::make_shared<Plane>(p1, p2, p3);
     system->addPlaneObstacle(plane);
 
     map->generateTremplin(plane, systemRenderable, texShader);
+
+    /*
+    TexturedPlaneRenderablePtr texPlane = std::make_shared<TexturedPlaneRenderable>(texShader, filename);
+    glm::mat4 parentTransformation = glm::mat4(1.0);
+    parentTransformation = glm::scale(parentTransformation, glm::vec3(800.0,800.0,1.0));
+    parentTransformation = glm::translate(parentTransformation, glm::vec3(1.0,0.0,0.0));
+    texPlane->setParentTransform(parentTransformation);
+    texPlane->setMaterial(normal);
+    viewer.addRenderable(texPlane);
+    */
 
     //Création de la particule associée au skieur
     glm::vec3 px(-380.0, 0.0, 400.0);
@@ -110,7 +121,6 @@ void initialize_practical_10_scene(Viewer& viewer)
     skieur->initControlledSkieur(flatShader, systemRenderable);
     skieur->initForcesSkieur(system, systemRenderable, flatShader, mobile);
     viewer.getCamera().setParticle(mobile);
-
 
     viewer.startAnimation();
 
