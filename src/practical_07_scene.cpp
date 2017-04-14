@@ -30,6 +30,8 @@ void practical07_collisions(Viewer& viewer,
 void practical07_playPool(Viewer& viewer,
     DynamicSystemPtr& system, DynamicSystemRenderablePtr& systemRenderable);
 
+void practical07_test(Viewer& viewer,
+    DynamicSystemPtr& system, DynamicSystemRenderablePtr& systemRenderable);
 
 void initialize_practical_07_scene(Viewer& viewer, unsigned int scene_to_load)
 {
@@ -429,4 +431,45 @@ void practical07_playPool(Viewer& viewer, DynamicSystemPtr& system, DynamicSyste
     //Activate collision and set the restitution coefficient to 1.0
     system->setCollisionsDetection(true);
     system->setRestitution(1.0f);
+}
+
+void practical07_test(Viewer& viewer,
+    DynamicSystemPtr& system, DynamicSystemRenderablePtr& systemRenderable) {
+
+	
+    ShaderProgramPtr flatShader
+        = std::make_shared<ShaderProgram>("../shaders/flatVertex.glsl",
+                                          "../shaders/flatFragment.glsl");
+    viewer.addShaderProgram(flatShader);
+
+
+    // create renderable objects
+    viewer.addRenderable(std::make_shared<FrameRenderable>(flatShader));
+
+	float x = 0;
+	float y = 0;
+	float z = 0;
+	//m_timestart = ((float)std::clock())/CLOCKS_PER_SEC;
+	std::vector<ParticlePtr> particles;
+	particles.resize(3*50);
+
+	ParticlePtr p;
+	float dtheta = 0;
+	for (int j=0; j<3; ++j) {
+		for (int i=0; i<50; ++i) {
+			p = std::make_shared<Particle>(
+					glm::vec3(x+sin(dtheta)+j*0.01,y+cos(dtheta)+j*0.01, z),
+				   	glm::vec3(sin(dtheta)*(rand()%100)/100, cos(dtheta)*(rand()%100)/100, 1.0),
+				   	1, 0.01);
+			dtheta += 2*PI/50;
+			particles[50*j + i](p);
+			system->addParticle(p)
+		}
+		dtheta = 0;
+	}
+	
+	ParticleListRenderablePtr effect = std::make_shared<ParticleListRenderable>(m_shader, particles);
+	Hierarchical::addChild(effect);
+	viewer.addRenderable(effect);
+	
 }
