@@ -196,6 +196,14 @@ void initialize_practical_10_scene(Viewer& viewer)
     sky->setMaterial(normal);
     viewer.addRenderable(sky); 
     
+    /********** Ajout d'une pencarte en bas pour restart ***********/
+    SkyBallPtr pencarte = std::make_shared<SkyBall>(texShader, "../textures/pencarte.jpg");
+    transfo = glm::translate(glm::mat4(1.0), glm::vec3(450.0, 0.0, 9.0));
+    transfo = glm::scale(transfo, glm::vec3(0.5, 40.0, 5.0));
+    pencarte->setParentTransform(transfo);
+    pencarte->setMaterial(normal);
+    viewer.addRenderable(pencarte); 
+    
 
     viewer.setAnimationLoop(false, 2*3.14159265);
     viewer.startAnimation();

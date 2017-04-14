@@ -1,6 +1,5 @@
 # Blender v2.78 (sub 0) OBJ File: ''
 # www.blender.org
-mtllib Body.mtl
 o Body
 v -15.649676 -2.017256 0.580066
 v -15.565635 -2.072659 0.699601
