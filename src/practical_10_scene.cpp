@@ -17,6 +17,7 @@
 #include "../include/dynamics_rendering/SpringListRenderable.hpp"
 #include "../include/dynamics_rendering/ControlledForceFieldRenderable.hpp"
 #include "../include/dynamics_rendering/QuadRenderable.hpp"
+#include "../include/dynamics_rendering/ParticleListRenderable.hpp"
 
 #include "../include/texturing/TexturedPlaneRenderable.hpp"
 #include "../include/texturing/Fence.hpp"
@@ -203,6 +204,37 @@ void initialize_practical_10_scene(Viewer& viewer)
     pencarte->setParentTransform(transfo);
     pencarte->setMaterial(normal);
     viewer.addRenderable(pencarte); 
+    
+    /********** Effet neige ***********/
+    float x = 0;
+    float y = 0;
+    float z = 0;
+    //m_timestart = ((float)std::clock())/CLOCKS_PER_SEC;
+    ParticlePtr p;
+    std::vector<ParticlePtr> listPart;
+    float dtheta = 0;
+    for (int j=0; j<5; ++j) {
+            for (int i=0; i<50; ++i) {
+                    p = std::make_shared<Particle>(
+                                    glm::vec3(0,0,0),
+                                    glm::vec3(0,0,0),
+                                    1, 0.05);
+                    float r = mobile->getRadius();
+                    p->setInitPos(glm::vec3(x+sin(dtheta)+j*0.01,y+cos(dtheta)+j*0.01, z-r));
+                    p->setInitVelocity(glm::vec3(sin(dtheta)*(rand()%100)/10, cos(dtheta)*(rand()%100)/10, 1.0));
+                    dtheta += 2*PI/50;
+                    listPart.push_back(p);
+                    system->addParticle(p);
+            }
+            dtheta = 0;
+    }
+    mobile->setEffects(listPart);
+    ParticleListRenderablePtr effects = std::make_shared<ParticleListRenderable>(flatShader, listPart);
+    HierarchicalRenderable::addChild(systemRenderable, effects);
+    
+    ConstantForceFieldPtr gravityForceField
+        = std::make_shared<ConstantForceField>(listPart, glm::vec3{0.0, 0.0, -5} );
+    system->addForceField(gravityForceField);
     
 
     viewer.setAnimationLoop(false, 2*3.14159265);

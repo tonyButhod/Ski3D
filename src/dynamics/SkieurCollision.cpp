@@ -82,6 +82,7 @@ void SkieurCollision::do_solveCollision()
         m_particle->setVelocity(glm::vec3(0.0,0.0,0.0));
         m_particle->setFail(true);
         m_particle->setJump(false);
+        m_particle->applyEffect();
     }
     //On met a jour lorientation dans tous les cas
     m_particle->setRotation(rotation + 0.1f*glm::vec3(diffx, diffy, 0));

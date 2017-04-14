@@ -118,3 +118,21 @@ std::ostream& operator<<(std::ostream& os, const ParticlePtr& p)
 
     return os;
 }
+
+void Particle::initParticle(glm::vec3 pos) {
+    setPosition(pos + m_initPos);
+    setVelocity(m_initVelocity);
+    m_clock = clock();
+}
+
+void Particle::setInitPos(glm::vec3 pos){
+    m_initPos = pos;
+}
+    
+void Particle::setInitVelocity(glm::vec3 vel) {
+    m_initVelocity = vel;
+}
+
+clock_t Particle::getClock() {
+    return m_clock;
+}

@@ -1,6 +1,7 @@
 #include "../../include/dynamics_rendering/ParticleListRenderable.hpp"
 #include "../../teachers/Geometries.hpp"
 #include <glm/gtc/type_ptr.hpp>
+#include <ctime>
 
 ParticleListRenderable::ParticleListRenderable(ShaderProgramPtr program, std::vector<ParticlePtr>& particles)
     : HierarchicalRenderable(program), m_positionBuffer(0)
@@ -58,21 +59,23 @@ void ParticleListRenderable::do_draw()
         glcheck(glVertexAttribPointer(normalLocation, 3, GL_FLOAT, GL_FALSE, 0, (void*)0));
     }
 
-    const size_t nparticles = m_particles.size();
-    glm::mat4 model = getModelMatrix();
-    glm::mat4 transformation(1.0);
-    for (size_t i = 0; i < nparticles; ++ i) {
-        glm::vec3 position = m_particles[i]->getPosition();
-        float scale = m_particles[i]->getRadius();
-        transformation[0][0] = scale;
-        transformation[1][1] = scale;
-        transformation[2][2] = scale;
-        transformation[3][0] = position.x;
-        transformation[3][1] = position.y;
-        transformation[3][2] = position.z;
+    if (((float)(m_particles[0]->getClock() - clock()))/CLOCKS_PER_SEC < 0.1) {
+        const size_t nparticles = m_particles.size();
+        glm::mat4 model = getModelMatrix();
+        glm::mat4 transformation(1.0);
+        for (size_t i = 0; i < nparticles; ++ i) {
+            glm::vec3 position = m_particles[i]->getPosition();
+            float scale = m_particles[i]->getRadius();
+            transformation[0][0] = scale;
+            transformation[1][1] = scale;
+            transformation[2][2] = scale;
+            transformation[3][0] = position.x;
+            transformation[3][1] = position.y;
+            transformation[3][2] = position.z;
 
-        glcheck(glUniformMatrix4fv( modelLocation, 1, GL_FALSE, glm::value_ptr(model * transformation)));
-        glcheck(glDrawArrays(GL_TRIANGLES, 0, m_numberOfVertices));
+            glcheck(glUniformMatrix4fv( modelLocation, 1, GL_FALSE, glm::value_ptr(model * transformation)));
+            glcheck(glDrawArrays(GL_TRIANGLES, 0, m_numberOfVertices));
+        }
     }
 }
 

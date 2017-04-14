@@ -44,3 +44,13 @@ void ParticleSkieur::setFail(bool fail) {
 bool ParticleSkieur::fail() {
     return m_fail;
 }
+
+void ParticleSkieur::applyEffect() {
+    for (ParticlePtr p : m_effects) {
+        p->initParticle(getPosition());
+    }
+}
+
+void ParticleSkieur::setEffects(std::vector<ParticlePtr> list) {
+    m_effects = list;
+}

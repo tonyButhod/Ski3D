@@ -145,6 +145,12 @@ public:
      * Set the particle's position and velocity to their initial values.
      */
     void restart();
+    
+    void initParticle(glm::vec3 pos);
+    
+    void setInitPos(glm::vec3 pos);
+    void setInitVelocity(glm::vec3 vel);
+    clock_t getClock();
 
 private:
     /**@brief The initial particle's position.
@@ -199,6 +205,10 @@ private:
     bool m_isFixed;
     
     bool m_collision;
+    
+    glm::vec3 m_initPos;
+    glm::vec3 m_initVelocity;
+    clock_t m_clock;
 };
 
 typedef std::shared_ptr<Particle> ParticlePtr;

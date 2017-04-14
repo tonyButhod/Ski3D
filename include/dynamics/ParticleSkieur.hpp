@@ -28,12 +28,16 @@ public:
     void setJump(const JumpRenderablePtr jump);
     JumpRenderablePtr getJump();
     
+    void applyEffect();
+    void setEffects(std::vector<ParticlePtr> list);
+    
     
 private:
     bool m_jumpCollision;
     bool m_canJump;
     bool m_fail;
     JumpRenderablePtr m_jump;
+    std::vector<ParticlePtr> m_effects;
 };
 
 typedef std::shared_ptr<ParticleSkieur> ParticleSkieurPtr;
