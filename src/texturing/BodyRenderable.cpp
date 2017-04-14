@@ -61,7 +61,7 @@ BodyRenderable::BodyRenderable(ShaderProgramPtr shaderProgram)
     // now handle the "texture image" itself
     // load the image (here using the sfml library)
     sf::Image image;
-    image.loadFromFile("../textures/deadpool_tex01_bm.png");
+    image.loadFromFile("../textures/Body.png");
     // sfml inverts the v axis...
     // Hence, flip it to put the image in OpenGL convention: lower left corner is (0,0)
     image.flipVertically();
@@ -97,6 +97,11 @@ BodyRenderable::~BodyRenderable()
 
 void BodyRenderable::do_draw()
 {
+    if (m_particle->fail()) {
+        displayTextInViewer("FAIL !!!");
+        m_particle->setFail(false);
+    }
+    
     //Locations
     int modelLocation = m_shaderProgram->getUniformLocation("modelMat");
     int nitLocation = m_shaderProgram->getUniformLocation("NIT");

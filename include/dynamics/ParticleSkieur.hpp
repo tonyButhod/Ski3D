@@ -20,6 +20,10 @@ public:
     
     void setJumpCollision(const bool jumpCollision);
     bool getJumpCollision();
+    void setJump(const bool jump);
+    bool canJump();
+    void setFail(bool fail);
+    bool fail();
     
     void setJump(const JumpRenderablePtr jump);
     JumpRenderablePtr getJump();
@@ -27,6 +31,8 @@ public:
     
 private:
     bool m_jumpCollision;
+    bool m_canJump;
+    bool m_fail;
     JumpRenderablePtr m_jump;
 };
 

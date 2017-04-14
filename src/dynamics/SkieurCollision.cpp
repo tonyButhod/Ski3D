@@ -75,6 +75,18 @@ void SkieurCollision::do_solveCollision()
     float anglez = acos(glm::dot(normal,glm::vec3(0,0,1)));
     float diffx = sin(anglex)*anglez - rotation[0];
     float diffy = cos(anglex)*anglez - rotation[1];
+    //On détecte si le skieur est tombé
+    if (diffx < 0.5 && diffx > -0.5 && diffy < 0.8 && diffy > -0.8) {
+        //Le skieur est okay, il peut sauter
+        m_particle->setJump(true);
+    }
+    else {
+        //Le skieur est tombé, on l'arrète
+        m_particle->setVelocity(glm::vec3(0.0,0.0,0.0));
+        m_particle->setFail(true);
+        m_particle->setJump(false);
+    }
+    //On met a jour lorientation dans tous les cas
     m_particle->setRotation(rotation + 0.1f*glm::vec3(diffx, diffy, 0));
 }
 

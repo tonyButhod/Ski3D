@@ -4,6 +4,8 @@ ParticleSkieur::ParticleSkieur(const glm::vec3 &position, const glm::vec3 &veloc
                    const float &mass, const float &radius) 
     : Particle(position, velocity, mass, radius) {
     m_jumpCollision = false;
+    m_canJump = false;
+    m_fail = false;
     m_jump = NULL;
 }
 
@@ -19,10 +21,26 @@ bool ParticleSkieur::getJumpCollision() {
     return m_jumpCollision;
 }
 
+void ParticleSkieur::setJump(const bool jump) {
+    m_canJump = jump;
+}
+
+bool ParticleSkieur::canJump() {
+    return m_canJump;
+}
+
 void ParticleSkieur::setJump(const JumpRenderablePtr jump) {
     m_jump = jump;
 }
 
 JumpRenderablePtr ParticleSkieur::getJump() {
     return m_jump;
+}
+
+void ParticleSkieur::setFail(bool fail) {
+    m_fail = fail;
+}
+
+bool ParticleSkieur::fail() {
+    return m_fail;
 }
