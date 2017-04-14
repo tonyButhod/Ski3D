@@ -17,7 +17,7 @@ ParticleListRenderable::ParticleListRenderable(ShaderProgramPtr program, std::ve
     m_numberOfVertices = positions.size();
     colors.resize(m_numberOfVertices);
     for (size_t i = 0; i < m_numberOfVertices; ++ i) {
-        colors[i] = getColor(positions[i].x, -1, 1);
+        colors[i] = glm::vec4(1.0,1.0,1.0,1.0);/* getColor(positions[i].x, -1, 1);*/
     }
 
     glcheck(glGenBuffers(1, &m_positionBuffer));
