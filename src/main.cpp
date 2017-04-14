@@ -57,6 +57,7 @@ int main(int argc, char* argv[])
         case 72:
         case 73:
         case 74:
+		case 75:
             initialize_practical_07_scene(viewer, scene_to_load);
             break;
         case 8:
