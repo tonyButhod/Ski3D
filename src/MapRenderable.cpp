@@ -333,9 +333,9 @@ void MapRenderable::generateSapin(Viewer& viewer, ShaderProgramPtr texShader)
 
     j = STEP_X;
 
-    for(i=MIN_Y; i<LIMIT_X; i += STEP_X*20)
+    for(i=MIN_Y; i<LIMIT_X; i += STEP_X*10)
     {
-          j = ((j*j+i+SEED_SAPIN)%(MMIN_X-NMIN_X))+NMIN_X;
+          j = ((j*j+i*i)%(MMIN_X-NMIN_X))+NMIN_X;
           TexturedSapinRenderablePtr texSapin = std::make_shared<TexturedSapinRenderable>(texShader, filename);
           texSapin->setMaterial(normalMat);
           localTransformation = glm::translate(glm::mat4(1.0), glm::vec3(i,j,getNoise(i, j)));
@@ -344,7 +344,7 @@ void MapRenderable::generateSapin(Viewer& viewer, ShaderProgramPtr texShader)
           viewer.addRenderable(texSapin);
           nbSapin++;
 
-          j = ((j*j+i+SEED_SAPIN)%(NMAX_X-MMAX_X))+MMAX_X;
+          j = ((j*j+i*i)%(NMAX_X-MMAX_X))+MMAX_X;
           texSapin = std::make_shared<TexturedSapinRenderable>(texShader, filename);
           texSapin->setMaterial(normalMat);
           localTransformation = glm::translate(glm::mat4(1.0), glm::vec3(i,j,getNoise(i, j)));
