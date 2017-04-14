@@ -25,7 +25,7 @@ void Camera::animate(float time)
 {
     if (m_particle != NULL) {
         glm::vec3 pos = m_particle->getPosition();
-	setViewMatrix(glm::lookAt(pos + glm::vec3(-15.0,0.0,15.0), pos, glm::vec3(0.0,0.0,1.0)));
+	setViewMatrix(glm::lookAt(pos + glm::vec3(-15.0,0.0,14.0), pos, glm::vec3(0.0,0.0,1.0)));
     }
 }
 

@@ -91,7 +91,8 @@ void ControlledSkieur::do_animate(float time)
             m_status.angle -= dt * m_status.angularSpeedUp;
             if (m_status.angle < m_status.min_angle)
                 m_status.angle = m_status.min_angle;
-            if ((m_particle->getCollision() || m_particle->getJumpCollision()) && m_status.angle != m_status.min_angle) {
+            if ((m_particle->getCollision() || m_particle->getJumpCollision()) && 
+                    m_status.angle != m_status.min_angle && m_particle->canJump()) {
                 glm::vec3 velocity = m_particle->getVelocity();
                 velocity[2] = m_status.angle*5.0;
                 m_particle->setVelocity(velocity);

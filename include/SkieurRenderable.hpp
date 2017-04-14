@@ -11,6 +11,7 @@
 #include "../include/HierarchicalRenderable.hpp"
 #include "../include/lighting/Material.hpp"
 #include "../include/dynamics/ParticleSkieur.hpp"
+#include "../include/dynamics/ReactionTangentielle.hpp"
 #include "../include/dynamics_rendering/ControlledForceFieldRenderable.hpp"
 #include "../include/dynamics_rendering/ControlledSkieur.hpp"
 #include "../include/dynamics_rendering/DynamicSystemRenderable.hpp"

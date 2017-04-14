@@ -20,6 +20,7 @@
 
 #include "../include/texturing/TexturedPlaneRenderable.hpp"
 #include "../include/texturing/Fence.hpp"
+#include "../include/texturing/SkyBall.hpp"
 
 #include "../include/lighting/DirectionalLightRenderable.hpp"
 
@@ -187,8 +188,24 @@ void initialize_practical_10_scene(Viewer& viewer)
     translate = glm::translate(glm::mat4(1.0), glm::vec3(450.0,36.0,-2.0));
     addFences(systemRenderable, texShader, 6, translate*transfo);
     
+    /********** Sky ball **********/
+    SkyBallPtr sky = std::make_shared<SkyBall>(texShader, "../textures/landscape.jpg");
+    transfo = glm::translate(glm::mat4(1.0), glm::vec3(0.0, 0.0, 100.0));
+    transfo = glm::scale(transfo, glm::vec3(1000.0, 1800.0, 1200.0));
+    sky->setParentTransform(transfo);
+    sky->setMaterial(normal);
+    viewer.addRenderable(sky); 
+    
+    /********** Ajout d'une pencarte en bas pour restart ***********/
+    SkyBallPtr pencarte = std::make_shared<SkyBall>(texShader, "../textures/pencarte.jpg");
+    transfo = glm::translate(glm::mat4(1.0), glm::vec3(450.0, 0.0, 9.0));
+    transfo = glm::scale(transfo, glm::vec3(0.5, 40.0, 5.0));
+    pencarte->setParentTransform(transfo);
+    pencarte->setMaterial(normal);
+    viewer.addRenderable(pencarte); 
+    
 
-	viewer.setAnimationLoop(false, 2*3.14159265);
+    viewer.setAnimationLoop(false, 2*3.14159265);
     viewer.startAnimation();
 
 
