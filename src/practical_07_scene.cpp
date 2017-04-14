@@ -17,6 +17,7 @@
 #include "../include/dynamics_rendering/QuadRenderable.hpp"
 #include "../include/texturing/BodyRenderable.hpp"
 
+#define PI 3.141592
 
 void practical07_particles(Viewer& viewer,
     DynamicSystemPtr& system, DynamicSystemRenderablePtr& systemRenderable);
@@ -70,6 +71,8 @@ void initialize_practical_07_scene(Viewer& viewer, unsigned int scene_to_load)
         case 74:
             practical07_playPool(viewer, system, systemRenderable);
             break;
+		case 75:
+			practical07_test(viewer, system, systemRenderable);
         default:
             break;
     }
@@ -451,25 +454,25 @@ void practical07_test(Viewer& viewer,
 	float z = 0;
 	//m_timestart = ((float)std::clock())/CLOCKS_PER_SEC;
 	std::vector<ParticlePtr> particles;
-	particles.resize(3*50);
+	particles.resize(5*50);
 
 	ParticlePtr p;
 	float dtheta = 0;
-	for (int j=0; j<3; ++j) {
+	for (int j=0; j<5; ++j) {
 		for (int i=0; i<50; ++i) {
 			p = std::make_shared<Particle>(
 					glm::vec3(x+sin(dtheta)+j*0.01,y+cos(dtheta)+j*0.01, z),
 				   	glm::vec3(sin(dtheta)*(rand()%100)/100, cos(dtheta)*(rand()%100)/100, 1.0),
 				   	1, 0.01);
 			dtheta += 2*PI/50;
-			particles[50*j + i](p);
-			system->addParticle(p)
+			particles[50*j + i] = (p);
+			system->addParticle(p);
 		}
 		dtheta = 0;
 	}
 	
-	ParticleListRenderablePtr effect = std::make_shared<ParticleListRenderable>(m_shader, particles);
-	Hierarchical::addChild(effect);
+	ParticleListRenderablePtr effect = std::make_shared<ParticleListRenderable>(flatShader, particles);
+	HierarchicalRenderable::addChild(systemRenderable, effect);
 	viewer.addRenderable(effect);
 	
 }
