@@ -26,6 +26,7 @@
 #define MAX_Y   400
 
 #define LIMIT_X 400
+#define LIMIT_X_END 450
 
 
 #define MMIN_X   -50
