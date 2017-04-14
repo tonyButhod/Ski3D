@@ -105,6 +105,13 @@ void SkieurRenderable::initForcesSkieur(DynamicSystemPtr system, HierarchicalRen
     //Add a damping force field to the mobile.
     DampingForceFieldPtr dampingForceField = std::make_shared<DampingForceField>(vParticle, 2.0);
     system->addForceField(dampingForceField);
+    
+    std::vector<ParticleSkieurPtr> vParticleSkieur;
+    vParticleSkieur.push_back(particle);
+
+    //Add a tangential force field to the mobile when collision with ground.
+    ReactionTangentiellePtr tangForceField = std::make_shared<ReactionTangentielle>(vParticleSkieur, 30.0f);
+    system->addForceField(tangForceField);
 
     //Initialize a force field that apply to all the particles of the system to simulate gravity
     //Add it to the system as a force field

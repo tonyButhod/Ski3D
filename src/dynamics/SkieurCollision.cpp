@@ -54,7 +54,7 @@ void SkieurCollision::do_solveCollision()
     // Les conditions suivantes permettent d'éviter qu'il fasse la rotation 
     // inverse pour qu'il se remette droit.
     if (abs(rotation[0]) + abs(rotation[1]) > 3.14159265359f) {
-        rotation[0] = ((rotation[0]<0)?-1.0f:1.0f)*3.14159265359f - rotation[0];
+        rotation[0] = ((rotation[0]<0)?1.0f:-1.0f)*3.14159265359f + rotation[0];
         rotation[1] = ((rotation[1]<0)?-1.0f:1.0f)*3.14159265359f - rotation[1];
         rotation[2] -= 3.14159265359f;
     }
@@ -62,9 +62,6 @@ void SkieurCollision::do_solveCollision()
     glm::vec3 ortho_ski = glm::normalize(glm::vec3(-sin(rotation[2]), cos(rotation[2]), 0.0));
     float proj_ski = glm::dot(m_particle->getVelocity(), ortho_ski);
     m_particle->setVelocity(m_particle->getVelocity() - proj_ski*ortho_ski);
-    //Réaction tangetielle du suppport.
-    float frottement = 0.0028f;
-    m_particle->setVelocity((1.0f - frottement) * m_particle->getVelocity());
     //On enregistre la normale au sol lors de la collision pour orienter le skieur.
     glm::vec3 proj_n = normal;
     proj_n[2] = 0.0;
